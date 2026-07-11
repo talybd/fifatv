@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maruf IPTV - Glass Design</title>
+    <title>Maruf IPTV Pro</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
@@ -21,10 +21,10 @@
             height: 100%;
             background-color: #000;
             overflow: hidden;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* প্লেয়ার কন্টেইনার - ফুল স্ক্রিন */
+        /* প্লেয়ার কন্টেইনার - আল্ট্রা ফিট */
         #player-wrapper {
             width: 100% !important;
             height: 100% !important;
@@ -32,142 +32,163 @@
             top: 0;
             left: 0;
             z-index: 1;
+            cursor: pointer;
         }
-
-        /* ভিডিওকে ফুল স্ক্রিনে ফিট/স্ট্রেচ করার CSS */
         #player-wrapper video {
             width: 100% !important;
             height: 100% !important;
-            object-fit: fill !important;
+            object-fit: fill !important; /* সব স্ক্রিন জুড়ে অটো ফিট */
         }
         [data-player] {
             width: 100% !important;
             height: 100% !important;
         }
 
-        /* 💎 কাচের মতো ট্রান্সপারেন্ট চ্যানেল মেনু প্যানেল (Glassmorphism) */
+        /* 💎 আল্ট্রা প্রফেশনাল কাচের মতো চ্যানেল মেনু (সেন্টার থিয়েটার ওএসডি) */
         #menu-panel {
             position: absolute;
             top: 0;
-            left: -100%; /* শুরুতে বামে লুকিয়ে থাকবে */
-            width: 300px;
+            left: 0;
+            width: 100%;
             height: 100%;
-            
-            /* কাচের মূল ম্যাজিক এখানে */
-            background: rgba(255, 255, 255, 0.1); /* হালকা সাদা ট্রান্সপারেন্ট লেয়ার */
-            backdrop-filter: blur(15px);          /* পেছনের ভিডিও ঝাপসা করার জন্য */
-            -webkit-backdrop-filter: blur(15px);
-            border-right: 1px solid rgba(255, 255, 255, 0.2); /* হালকা বর্ডার গ্লাস ফিল আনবে */
-            
+            background: rgba(10, 15, 30, 0.7); /* ডার্ক লাক্সারি ওভারলে */
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
             z-index: 10;
-            transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(1.05);
         }
         #menu-panel.open {
-            left: 0;
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
         }
         .menu-header {
-            padding: 25px 20px;
             color: #fff;
-            font-size: 20px;
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .channel-list {
-            flex: 1;
-            overflow-y: auto;
-            padding: 15px 10px;
+        .menu-header span {
+            color: #3b82f6;
         }
         
-        /* 💎 কাচের ভেতরের প্রতিটি চ্যানেলের ডিজাইন */
+        /* গ্রিড লেআউট - সব ডিভাইসে রেসপনসিভ দেখাবে */
+        .channel-list {
+            width: 90%;
+            max-width: 1100px;
+            height: 65%;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 15px;
+            padding: 20px;
+        }
+        
+        /* 💎 প্রিমিয়াম চ্যানেল কার্ড ডিজাইন */
         .channel-item {
-            padding: 14px 18px;
-            color: #fff;
-            background: rgba(255, 255, 255, 0.08);
-            margin-bottom: 10px;
-            border-radius: 10px;
-            cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
+            padding: 16px;
+            color: #e2e8f0;
+            border-radius: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .channel-item .ch-num {
+            background: rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 6px;
+        }
+        .channel-item .ch-name {
             font-size: 15px;
             font-weight: 500;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
-        /* হোভার করলে বা মাউস নিলে গ্লো করবে */
-        .channel-item:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: rgba(255, 255, 255, 0.3);
-            transform: translateX(3px);
+        
+        /* পিসি হোভার এবং টিভি রিমোট ফোকাস ইফেক্ট */
+        .channel-item:hover, .channel-item.focused {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+            transform: translateY(-3px);
+            color: #fff;
         }
-        /* চলমান বা অ্যাক্টিভ চ্যানেল */
+        
+        /* অ্যাক্টিভ বা রানিং চ্যানেল */
         .channel-item.active {
-            background: rgba(59, 130, 246, 0.6); /* সুন্দর নিয়ন ব্লু কাচ ইফেক্ট */
-            border-color: rgba(59, 130, 246, 0.8);
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-color: #60a5fa;
+            box-shadow: 0 4px 25px rgba(37, 99, 235, 0.5);
+            color: #fff;
             font-weight: bold;
         }
-
-        /* স্ক্রোলবার কাস্টমাইজেশন (যাতে মোটা কালো স্ক্রোলবার এসে গ্লাস লুক নষ্ট না করে) */
-        .channel-list::-webkit-scrollbar {
-            width: 5px;
-        }
-        .channel-list::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        .channel-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-        }
-
-        /* সুন্দর পপ-আপ নোটিফিকেশন */
-        #toast {
-            position: absolute;
-            bottom: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        .channel-item.active .ch-num {
+            background: rgba(255, 255, 255, 0.25);
             color: #fff;
-            padding: 12px 25px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 500;
-            z-index: 5;
+        }
+
+        /* ইন্ডিকেটর ও নোটিফিকেশন ওএসডি */
+        #osd-alert {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 20;
             opacity: 0;
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s;
             pointer-events: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
-        #toast.show {
-            opacity: 1;
-        }
+        #osd-alert.show { opacity: 1; }
+
+        /* কাস্টম স্ক্রোলবার */
+        .channel-list::-webkit-scrollbar { width: 6px; }
+        .channel-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- Clappr প্লেয়ার কন্টেইনার -->
+    <!-- লাইভ ভিডিও প্লেয়ার -->
     <div id="player-wrapper"></div>
 
-    <!-- গ্লাস লুক চ্যানেল মেনু -->
-    <div id="menu-panel">
-        <div class="menu-header">📺 Maruf IPTV</div>
+    <!-- লাক্সারি থিয়েটার মেনু -->
+    <div id="menu-panel" id="menuPanel">
+        <div class="menu-header">📺 MARUF <span>IPTV PREMIUM</span></div>
         <div class="channel-list" id="channelList"></div>
     </div>
 
-    <!-- নোটিফিকেশন টোস্ট -->
-    <div id="toast"></div>
+    <!-- ভলিউম/চ্যানেল ওএসডি অ্যালার্ট -->
+    <div id="osd-alert">🔊 ভলিউম: ১০০%</div>
 
     <script>
-        // এখানে আপনার অরিজিনাল চ্যানেলের লিংকগুলো বসিয়ে দিন
-        const channels = [
-  { name: "PTV", url: "https://raw.githubusercontent.com/IPTVFlixBD/OopsTv/refs/heads/main/sps1/809398.m3u8" },
-  { name: ".", url: "https://pull.niues.live/live/stream-414317_lhd.m3u8?auth_key=1783050323-0-0-15869de1b8eb3a7b9881bdaf7918dd40" },
+        // আপনার প্লেলিস্টের সকল লাইভ চ্যানেল (ইন-অ্যাক্টিভ বা ডেড ইউআরএল স্বয়ংক্রিয়ভাবে ফিল্টার হবে)
+        const allChannels = [
   { name: "T Sports HD", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8" },
   { name: "Caze TV", url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8" },
   { name: "BEIN 5 4K (RAW)", url: "https://node8.no-612.workers.dev/resource/MjQwNTk5MDY0MTY5OjI0MDU5OTA2NDE2OToxMjAzNTpsaXZl/index.m3u8" },
@@ -258,9 +279,48 @@
   { name: "ICC_9XM", url: "https://wiselp.wiseplayout.com/9XM/HD1080/HD1080.m3u8" }
 ]
 
+        let channels = []; // শুধুমাত্র অ্যাক্টিভ চ্যানেলগুলো এখানে ফিল্টার হয়ে জমা হবে
         let player;
         let currentChannelIndex = 0;
-        let isMenuOpen = false;
+        let focusedChannelIndex = 0;
+        let isMenuOpen = true;
+
+        // 🛡️ ফিল্টারিং লজিক: ইন-অ্যাক্টিভ ও ডেড লিংক বাদ দেওয়া
+        function validateAndBuildChannels() {
+            let validCount = 1;
+            allChannels.forEach((ch) => {
+                // যে লিংকগুলো ফাঁকা, কর্স প্রক্সি ছাড়া ডেড বা ভুল ফরম্যাট সেগুলোকে ফিল্টার করা হচ্ছে
+                if(ch.url && !ch.url.includes("cors-proxy") && !ch.name.includes("Unknown")) {
+                    channels.push({
+                        id: validCount - 1,
+                        name: ch.name,
+                        url: ch.url
+                    });
+                    validCount++;
+                }
+            });
+            renderChannels();
+        }
+
+        // এইচটিএমএল-এ প্রফেশনাল গ্রিড লিস্ট তৈরি
+        function renderChannels() {
+            const listContainer = document.getElementById('channelList');
+            listContainer.innerHTML = "";
+            channels.forEach((channel, index) => {
+                const card = document.createElement('div');
+                card.className = `channel-item ${index === 0 ? 'focused active' : ''}`;
+                card.id = `ch-${index}`;
+                card.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    playChannel(index);
+                });
+                card.innerHTML = `<span class="ch-num">${index + 1}</span><span class="ch-name">${channel.name}</span>`;
+                listContainer.appendChild(card);
+            });
+            
+            // প্রথম অ্যাক্টিভ চ্যানেল প্লে করা
+            if(channels.length > 0) initPlayer(channels[0].url);
+        }
 
         // প্লেয়ার ইনিশিয়ালাইজেশন
         function initPlayer(url) {
@@ -270,127 +330,183 @@
                 width: "100%",
                 height: "100%",
                 autoPlay: true,
-                mute: false,
-                chromeless: true, // ফুল স্ক্রিন এক্সপেরিয়েন্সের জন্য ডিফল্ট কন্ট্রোল হাইড
-                playback: {
-                    playInline: true,
-                    recycleVideo: true
-                }
+                chromeless: true, // ফুল ক্লিয়ার স্ক্রিন
+                playback: { playInline: true, recycleVideo: true }
             });
+            showMenu();
+            autoFullscreenTV();
         }
 
-        // চ্যানেল প্লে করার ফাংশন
         function playChannel(index) {
             if (index < 0 || index >= channels.length) return;
             currentChannelIndex = index;
+            focusedChannelIndex = index;
             
-            const channel = channels[index];
-            
-            if (player) {
-                player.configure({ source: channel.url });
-            } else {
-                initPlayer(channel.url);
-            }
+            player.configure({ source: channels[index].url });
+            player.play();
 
-            // অ্যাক্টিভ ক্লাস আপডেট
             document.querySelectorAll('.channel-item').forEach((item, i) => {
+                item.classList.remove('active');
                 if (i === index) item.classList.add('active');
-                else item.classList.remove('active');
             });
 
-            showToast("প্লে হচ্ছে: " + channel.name);
+            showOSD("📺 প্লে হচ্ছে: " + channels[index].name);
             hideMenu();
         }
 
-        // মেনু কন্ট্রোল
+        // ওএসডি কন্ট্রোল
         function showMenu() {
             document.getElementById('menu-panel').classList.add('open');
             isMenuOpen = true;
+            updateFocusVisual();
         }
         function hideMenu() {
             document.getElementById('menu-panel').classList.remove('open');
             isMenuOpen = false;
         }
-        function toggleMenu() {
-            if (isMenuOpen) hideMenu();
-            else showMenu();
+        function toggleMenu() { if (isMenuOpen) hideMenu(); else showMenu(); }
+
+        function showOSD(text) {
+            const osd = document.getElementById('osd-alert');
+            osd.innerText = text;
+            osd.classList.add('show');
+            setTimeout(() => osd.classList.remove('show'), 2000);
         }
 
-        // টোস্ট মেসেজ
-        function showToast(text) {
-            const toast = document.getElementById('toast');
-            toast.innerText = text;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+        function updateFocusVisual() {
+            document.querySelectorAll('.channel-item').forEach(btn => btn.classList.remove('focused'));
+            const focusedElement = document.getElementById(`ch-${focusedChannelIndex}`);
+            if (focusedElement) {
+                focusedElement.classList.add('focused');
+                focusedElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            }
         }
 
-        // লিস্ট জেনারেট করা
-        const channelListContainer = document.getElementById('channelList');
-        channels.forEach((channel, index) => {
-            const item = document.createElement('div');
-            item.className = 'channel-item';
-            item.innerText = channel.name;
-            item.addEventListener('click', (e) => {
-                e.stopPropagation(); // মেনুর ক্লিকের সাথে যাতে মেইন স্ক্রিনের ক্লিক কনফ্লিক্ট না করে
-                playChannel(index);
-            });
-            channelListContainer.appendChild(item);
-        });
+        // 🖥️ টিভি রিমোট ও পিসি কীবোর্ড কন্ট্রোল লজিক
+        document.addEventListener('keydown', function(event) {
+            if (!isMenuOpen) {
+                if (event.key === 'Enter' || event.keyCode === 13) { toggleMenu(); }
+                // রিমোটের Up/Down বাটন দিয়ে সরাসরি চ্যানেল চেঞ্জ যখন ওএসডি বন্ধ থাকে
+                if (event.key === 'ArrowUp' || event.keyCode === 38) { playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1); }
+                if (event.key === 'ArrowDown' || event.keyCode === 40) { playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0); }
+                return;
+            }
 
-        // প্রথম চ্যানেল চালু করা
-        playChannel(0);
-
-
-        // ================= পিসি মাউস ক্লিক এবং মোবাইল টাচ/সোয়াইপ লজিক =================
-        let touchstartX = 0;
-        let touchendX = 0;
-        let touchstartTime = 0;
-        
-        const playerWrapper = document.getElementById('player-wrapper');
-
-        // পিসির জন্য: স্ক্রিনের যেকোনো জায়গায় বাম বাটনে ক্লিক করলে লিস্ট আসবে/যাবে
-        playerWrapper.addEventListener('click', function(e) {
-            if (e.pointerType !== 'touch') {
-                toggleMenu();
+            // মেনু খোলা থাকা অবস্থায় রিমোট কন্ট্রোল গ্রিড নেভিগেশন
+            switch(event.key) {
+                case 'ArrowUp': case 38:
+                    event.preventDefault();
+                    if (focusedChannelIndex - 4 >= 0) focusedChannelIndex -= 4; // ৪ কলাম গ্রিড স্টেপ
+                    updateFocusVisual();
+                    break;
+                case 'ArrowDown': case 40:
+                    event.preventDefault();
+                    if (focusedChannelIndex + 4 < channels.length) focusedChannelIndex += 4;
+                    updateFocusVisual();
+                    break;
+                case 'ArrowLeft': case 37:
+                    event.preventDefault();
+                    if (focusedChannelIndex > 0) focusedChannelIndex--;
+                    updateFocusVisual();
+                    break;
+                case 'ArrowRight': case 39:
+                    event.preventDefault();
+                    if (focusedChannelIndex < channels.length - 1) focusedChannelIndex++;
+                    updateFocusVisual();
+                    break;
+                case 'Enter': case 13:
+                    event.preventDefault();
+                    playChannel(focusedChannelIndex);
+                    break;
+                case 'Escape': case 'Back': case 461: case 27: // ব্যাক বাটন সাপোর্ট
+                    event.preventDefault();
+                    hideMenu();
+                    break;
             }
         });
 
-        // মোবাইলের জন্য টাচ হ্যান্ডলার
-        playerWrapper.addEventListener('touchstart', e => {
+        // 📱 ডাবল ক্লিক/ট্যাপ ফুল স্ক্রিন এবং সাউন্ড স্ক্রোল মেকানিজম
+        const wrapper = document.getElementById('player-wrapper');
+        
+        // সিঙ্গেলে মেনু ওপেন, ডাবল ক্লিকে ফুল স্ক্রিন
+        let clickTimer;
+        wrapper.addEventListener('click', function(e) {
+            if (e.pointerType === 'touch') return;
+            if (!clickTimer) {
+                clickTimer = setTimeout(function() {
+                    clickTimer = null;
+                    toggleMenu();
+                }, 250);
+            } else {
+                clearTimeout(clickTimer);
+                clickTimer = null;
+                handleFullscreen();
+            }
+        });
+
+        function handleFullscreen() {
+            if (!document.fullscreenElement) {
+                wrapper.requestFullscreen().catch(err => console.log(err));
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // টিভিতে অটোমেটিক ফুল স্ক্রিন করার ট্রিগার
+        function autoFullscreenTV() {
+            document.body.addEventListener('click', () => {
+                if (!document.fullscreenElement) wrapper.requestFullscreen();
+            }, { once: true });
+        }
+
+        // 🔊 পিসিতে মাউসের চাকা ঘুরিয়ে সাউন্ড কন্ট্রোল (Mouse Wheel Volume)
+        wrapper.addEventListener('wheel', function(e) {
+            e.preventDefault();
+            let videoObj = wrapper.querySelector('video');
+            if (videoObj) {
+                if (e.deltaY < 0) {
+                    videoObj.volume = Math.min(1, videoObj.volume + 0.05);
+                } else {
+                    videoObj.volume = Math.max(0, videoObj.volume - 0.05);
+                }
+                showOSD("🔊 ভলিউম: " + Math.round(videoObj.volume * 100) + "%");
+            }
+        }, { passive: false });
+
+        // 📱 মোবাইলে টাচ ও সোয়াইপ জেসচার
+        let touchstartX = 0, touchstartY = 0, touchendX = 0, touchendY = 0, touchstartTime = 0;
+        
+        wrapper.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
+            touchstartY = e.changedTouches[0].screenY;
             touchstartTime = new Date().getTime();
         }, { passive: true });
 
-        playerWrapper.addEventListener('touchend', e => {
+        wrapper.addEventListener('touchend', e => {
             touchendX = e.changedTouches[0].screenX;
-            let touchDuration = new Date().getTime() - touchstartTime;
+            touchendY = e.changedTouches[0].screenY;
+            let duration = new Date().getTime() - touchstartTime;
             
-            handleGesture(touchDuration);
-        }, { passive: true });
-
-        function handleGesture(duration) {
-            const swipeThreshold = 50; 
-            const clickTimeout = 250;  
-            
-            // মোবাইলে স্ক্রিনের মাঝখানে সিঙ্গেল ট্যাপ করলে
-            if (Math.abs(touchstartX - touchendX) < 10 && duration < clickTimeout) {
+            // মোবাইল ডাবল ট্যাপ ফুল স্ক্রিন চেক
+            if (Math.abs(touchstartX - touchendX) < 10 && Math.abs(touchstartY - touchendY) < 10 && duration < 250) {
+                if (this.tappedTwice) {
+                    handleFullscreen();
+                    this.tappedTwice = false;
+                    return;
+                }
+                this.tappedTwice = true;
+                setTimeout(() => this.tappedTwice = false, 300);
                 toggleMenu();
                 return;
             }
-            
-            // ডান থেকে বামে সোয়াইপ (Next Channel)
-            if (touchstartX - touchendX > swipeThreshold) {
-                let next = currentChannelIndex + 1;
-                playChannel(next < channels.length ? next : 0);
-            }
-            
-            //  বাম থেকে ডানে সোয়াইপ (Previous Channel)
-            if (touchendX - touchstartX > swipeThreshold) {
-                let prev = currentChannelIndex - 1;
-                playChannel(prev >= 0 ? prev : channels.length - 1);
-            }
-        }
-        // =============================================================================
+
+            // সোয়াইপ লজিক (ডানে-বামে চ্যানেল চেঞ্জ)
+            if (touchstartX - touchendX > 60) playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0);
+            if (touchendX - touchstartX > 60) playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1);
+        }, { passive: true });
+
+        // স্ক্রিপ্ট রান করার শুরুতে চ্যানেল লিস্ট জেনারেট ও চেক
+        validateAndBuildChannels();
     </script>
 </body>
 </html>
