@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maruf IPTV</title>
+    <!-- Clappr Player Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.min.js"></script>
+    
+    <!-- PWA Settings for Android/Chrome Install -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#1e293b">
+    
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+        }
+        #player-wrapper {
+            width: 100%;
+            max-width: 800px;
+            background-color: #000;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+            aspect-ratio: 16 / 9;
+            position: relative;
+        }
+        #player {
+            width: 100%;
+            height: 100%;
+        }
+        
+        /* ডাইনামিক চ্যানেল লিস্ট ওভারলে (ভিডিওর ওপর দেখাবে) */
+        .channel-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85); /* হালকা কালো স্বচ্ছ ব্যাকগ্রাউন্ড */
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            overflow-y: auto;
+            z-index: 999;
+            transition: opacity 0.3s ease;
+            opacity: 1; /* শুরুতে দেখাবে, পরে OK চাপলে লজিক অনুযায়ী হাইড হবে */
+        }
+        .channel-overlay.hidden {
+            display: none;
+            opacity: 0;
+        }
+        .overlay-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #3b82f6;
+            border-bottom: 2px solid #1e293b;
+            padding-bottom: 5px;
+        }
+        .channel-btn {
+            background-color: #1e293b;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        /* রিমোট দিয়ে সিলেক্ট (ফোকাস) হলে কেমন দেখাবে */
+        .channel-btn.focused {
+            background-color: #334155;
+            border-color: #3b82f6;
+            transform: scale(1.02);
+        }
+        /* বর্তমানে যে চ্যানেলটি ব্যাকগ্রাউন্ডে একটিভ আছে */
+        .channel-btn.active-stream {
+            background-color: #1e3a8a;
+        }
+        .channel-num {
+            background-color: #3b82f6;
+            color: white;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-right: 15px;
+            min-width: 35px;
+            text-align: center;
+        }
+        .channel-name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .info-bar {
+            margin-top: 10px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ভিডিও প্লেয়ার এবং লিস্ট ওভারলে কন্টেইনার -->
+    <div id="player-wrapper">
+        <div id="player"></div>
+        
+        <!-- চ্যানেলের তালিকা ওভারলে -->
+        <div class="channel-overlay" id="menuOverlay">
+            <div class="overlay-title">📺 Maruf IPTV - চ্যানেল লিস্ট (OK বা Enter চাপুন)</div>
+            <div id="channelListContainer"></div>
+        </div>
+    </div>
+
+    <div class="info-bar">
+        💡 রিমোটের <b>OK / Enter</b> চাপলে লিস্ট আসবে/যাবে। <b>⬆️ ⬇️ অ্যারো</b> দিয়ে চ্যানেল সিলেক্ট করুন।
+    </div>
+
+    <script>
+        // ১. আপনার চ্যানেলের নাম এবং লাইভ স্ট্রিমিং লিংক (অবশ্যই HTTPS লিংক ব্যবহার করার চেষ্টা করবেন)
+        const channels = [
+            { name: "T SPORTS (Demo)", url: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" },
+            { name: "PTV SPORTS (Demo)", url: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" },
+            { name: "SOMOY TV", url: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8" },
+            { name: "UNITE8 HD", url: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" },
+            { name: "NAGORIK TV", url: "https://demo.unified-streaming.com/k8s/features/stable/video/tears-of-steel/tears-of-steel.ism/.m3u8" }
+        ];
+
+        let currentChannelIndex = 0; // বর্তমানে কোন চ্যানেল ব্যাকগ্রাউন্ডে চলছে
+        let focusedChannelIndex = 0; // রিমোটের আপ-ডাউন দিয়ে বর্তমানে কোনটা সিলেক্ট করা হচ্ছে
+        let isMenuOpen = true;       // মেনু খোলা নাকি বন্ধ তার ট্র্যাক রাখা
+        var player;
+
+        // ২. এইচটিএমএল-এ চ্যানেলের তালিকা তৈরি করা
+        const listContainer = document.getElementById('channelListContainer');
+        channels.forEach((channel, index) => {
+            const btn = document.createElement('div');
+            btn.className = `channel-btn ${index === 0 ? 'focused active-stream' : ''}`;
+            btn.id = `ch-${index}`;
+            btn.setAttribute('onclick', `clickPlayChannel(${index})`);
+            btn.innerHTML = `<span class="channel-num">${index + 1}</span><span class="channel-name">${channel.name}</span>`;
+            listContainer.appendChild(btn);
+        });
+
+        // ৩. প্লেয়ার ইনিশিয়ালাইজ করা
+        player = new Clappr.Player({
+            source: channels[currentChannelIndex].url,
+            parentId: "#player",
+            width: '100%',
+            height: '100%',
+            autoPlay: true
+        });
+
+        // ৪. রিমোট বা মাউস ক্লিকে চ্যানেল প্লে করার ফাংশন
+        function playChannel(index) {
+            if (index >= 0 && index < channels.length) {
+                currentChannelIndex = index;
+                
+                // ক্লাসের ভিজ্যুয়াল স্টাইল আপডেট
+                document.querySelectorAll('.channel-btn').forEach(btn => btn.classList.remove('active-stream'));
+                document.getElementById(`ch-${index}`).classList.add('active-stream');
+
+                player.load(channels[currentChannelIndex].url);
+                player.play();
+                
+                // চ্যানেল প্লে হওয়ার সাথে সাথে মেনু হাইড করা
+                hideMenu();
+
+                // ফুলস্ক্রিন ট্রিগার
+                let playerWrapper = document.getElementById("player-wrapper");
+                if (playerWrapper.requestFullscreen) playerWrapper.requestFullscreen();
+            }
+        }
+
+        // মাউস দিয়ে সরাসরি ক্লিক করলে প্লে করার জন্য কাস্টম ফাংশন
+        function clickPlayChannel(index) {
+            focusedChannelIndex = index;
+            updateFocusVisual();
+            playChannel(index);
+        }
+
+        // ৫. মেনু দেখানো এবং লুকানোর ফাংশন
+        function toggleMenu() {
+            if (isMenuOpen) {
+                hideMenu();
+            } else {
+                showMenu();
+            }
+        }
+
+        function showMenu() {
+            document.getElementById('menuOverlay').classList.remove('hidden');
+            isMenuOpen = true;
+            focusedChannelIndex = currentChannelIndex; // মেনু খুললে রানিং চ্যানেলের ওপর ফোকাস যাবে
+            updateFocusVisual();
+        }
+
+        function hideMenu() {
+            document.getElementById('menuOverlay').classList.add('hidden');
+            isMenuOpen = false;
+        }
+
+        // ফোকাস স্টাইল আপডেট করার ফাংশন
+        function updateFocusVisual() {
+            document.querySelectorAll('.channel-btn').forEach(btn => btn.classList.remove('focused'));
+            const focusedElement = document.getElementById(`ch-${focusedChannelIndex}`);
+            if (focusedElement) {
+                focusedElement.classList.add('focused');
+                focusedElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); // স্ক্রল অটোমেটিক হবে
+            }
+        }
+
+        // ৬. রিমোট এবং কীবোর্ড কী-কন্ট্রোল (OK, Up, Down)
+        document.addEventListener('keydown', function(event) {
+            // রিমোটের OK বা কীবোর্ডের Enter বাটন (KeyCode 13)
+            if (event.key === 'Enter' || event.keyCode === 13) {
+                event.preventDefault();
+                if (isMenuOpen) {
+                    // মেনু খোলা থাকলে সিলেক্টেড চ্যানেলটি প্লে হবে
+                    playChannel(focusedChannelIndex);
+                } else {
+                    // মেনু বন্ধ থাকলে ওকে চাপলে মেনু ওপেন হবে
+                    showMenu();
+                }
+            } 
+            
+            // রিমোটের Down বাটন (KeyCode 40)
+            else if (event.key === 'ArrowDown' || event.keyCode === 40) {
+                event.preventDefault();
+                if (isMenuOpen) {
+                    // মেনু খোলা থাকলে ফোকাস নিচে নামবে
+                    if (focusedChannelIndex < channels.length - 1) {
+                        focusedChannelIndex++;
+                    } else {
+                        focusedChannelIndex = 0; // শেষে থাকলে আবার শুরুতে যাবে
+                    }
+                    updateFocusVisual();
+                } else {
+                    // মেনু বন্ধ থাকা অবস্থায় ডাউন চাপলে অটোমেটিক পরের চ্যানেলে যাবে
+                    let next = currentChannelIndex + 1;
+                    playChannel(next < channels.length ? next : 0);
+                }
+            } 
+            
+            // রিমোটের Up বাটন (KeyCode 38)
+            else if (event.key === 'ArrowUp' || event.keyCode === 38) {
+                event.preventDefault();
+                if (isMenuOpen) {
+                    // মেনু খোলা থাকলে ফোকাস উপরে উঠবে
+                    if (focusedChannelIndex > 0) {
+                        focusedChannelIndex--;
+                    } else {
+                        focusedChannelIndex = channels.length - 1; // শুরুতে থাকলে শেষে যাবে
+                    }
+                    updateFocusVisual();
+                } else {
+                    // মেনু বন্ধ থাকা অবস্থায় আপ চাপলে অটোমেটিক আগের চ্যানেলে যাবে
+                    let prev = currentChannelIndex - 1;
+                    playChannel(prev >= 0 ? prev : channels.length - 1);
+                }
+            }
+        });
+
+        // PWA সার্ভিস ওয়ার্কার রেজিস্ট্রেশন
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => console.log(err));
+        }
+    </script>
+</body>
+</html>
