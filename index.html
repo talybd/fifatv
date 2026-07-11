@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>মোবাইল লাইভ টিভি প্লেয়ার</title>
+    <title>Maruf IPTV - Glass Design</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
@@ -21,7 +21,7 @@
             height: 100%;
             background-color: #000;
             overflow: hidden;
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         /* প্লেয়ার কন্টেইনার - ফুল স্ক্রিন */
@@ -34,29 +34,34 @@
             z-index: 1;
         }
 
-        /* ভিডিও এলিমেন্টকে জোরপূর্বক পুরো স্ক্রিনে ফিট/স্ট্রেচ করার CSS */
+        /* ভিডিওকে ফুল স্ক্রিনে ফিট/স্ট্রেচ করার CSS */
         #player-wrapper video {
             width: 100% !important;
             height: 100% !important;
-            object-fit: fill !important; /* স্ক্রিন পুরো ভরে যাবে, কোনো বর্ডার থাকবে না */
+            object-fit: fill !important;
         }
         [data-player] {
             width: 100% !important;
             height: 100% !important;
         }
 
-        /* চ্যানেল মেনু প্যানেল */
+        /* 💎 কাচের মতো ট্রান্সপারেন্ট চ্যানেল মেনু প্যানেল (Glassmorphism) */
         #menu-panel {
             position: absolute;
             top: 0;
             left: -100%; /* শুরুতে বামে লুকিয়ে থাকবে */
-            width: 280px;
+            width: 300px;
             height: 100%;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(10px);
+            
+            /* কাচের মূল ম্যাজিক এখানে */
+            background: rgba(255, 255, 255, 0.1); /* হালকা সাদা ট্রান্সপারেন্ট লেয়ার */
+            backdrop-filter: blur(15px);          /* পেছনের ভিডিও ঝাপসা করার জন্য */
+            -webkit-backdrop-filter: blur(15px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2); /* হালকা বর্ডার গ্লাস ফিল আনবে */
+            
             z-index: 10;
-            transition: left 0.3s ease;
-            box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+            transition: left 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
         }
@@ -64,52 +69,80 @@
             left: 0;
         }
         .menu-header {
-            padding: 20px;
+            padding: 25px 20px;
             color: #fff;
             font-size: 20px;
             font-weight: bold;
-            border-bottom: 1px solid #333;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.15);
             text-align: center;
         }
         .channel-list {
             flex: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px 10px;
         }
+        
+        /* 💎 কাচের ভেতরের প্রতিটি চ্যানেলের ডিজাইন */
         .channel-item {
-            padding: 15px;
-            color: #ccc;
-            background: rgba(255,255,255,0.05);
-            margin-bottom: 8px;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 16px;
-        }
-        .channel-item:hidden {
-            display: none;
-        }
-        .channel-item.active {
-            background: #ff3b30;
+            padding: 14px 18px;
             color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+            margin-bottom: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.2s ease;
+            font-size: 15px;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+        /* হোভার করলে বা মাউস নিলে গ্লো করবে */
+        .channel-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateX(3px);
+        }
+        /* চলমান বা অ্যাক্টিভ চ্যানেল */
+        .channel-item.active {
+            background: rgba(59, 130, 246, 0.6); /* সুন্দর নিয়ন ব্লু কাচ ইফেক্ট */
+            border-color: rgba(59, 130, 246, 0.8);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
             font-weight: bold;
         }
 
-        /* টোস্ট নোটিফিকেশন (চ্যানেল নাম দেখানোর জন্য) */
+        /* স্ক্রোলবার কাস্টমাইজেশন (যাতে মোটা কালো স্ক্রোলবার এসে গ্লাস লুক নষ্ট না করে) */
+        .channel-list::-webkit-scrollbar {
+            width: 5px;
+        }
+        .channel-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .channel-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        /* সুন্দর পপ-আপ নোটিফিকেশন */
         #toast {
             position: absolute;
-            bottom: 30px;
+            bottom: 40px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.75);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: #fff;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: 500;
             z-index: 5;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s ease;
             pointer-events: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
         #toast.show {
             opacity: 1;
@@ -121,9 +154,9 @@
     <!-- Clappr প্লেয়ার কন্টেইনার -->
     <div id="player-wrapper"></div>
 
-    <!-- সাইড চ্যানেল মেনু -->
-    <div id="menu-panel" id="menuPanel">
-        <div class="menu-header">চ্যানেল লিস্ট</div>
+    <!-- গ্লাস লুক চ্যানেল মেনু -->
+    <div id="menu-panel">
+        <div class="menu-header">📺 Maruf IPTV</div>
         <div class="channel-list" id="channelList"></div>
     </div>
 
@@ -131,7 +164,7 @@
     <div id="toast"></div>
 
     <script>
-        // আপনার চ্যানেল লিস্ট (এখানে আপনার অরিজিনাল লিংকগুলো বসিয়ে দিন)
+        // এখানে আপনার অরিজিনাল চ্যানেলের লিংকগুলো বসিয়ে দিন
         const channels = [
   { name: "PTV", url: "https://raw.githubusercontent.com/IPTVFlixBD/OopsTv/refs/heads/main/sps1/809398.m3u8" },
   { name: ".", url: "https://pull.niues.live/live/stream-414317_lhd.m3u8?auth_key=1783050323-0-0-15869de1b8eb3a7b9881bdaf7918dd40" },
@@ -238,7 +271,7 @@
                 height: "100%",
                 autoPlay: true,
                 mute: false,
-                chromeless: true, // ডিফল্ট কন্ট্রোল হাইড রাখা হয়েছে ফুল স্ক্রিন ফিল পাওয়ার জন্য
+                chromeless: true, // ফুল স্ক্রিন এক্সপেরিয়েন্সের জন্য ডিফল্ট কন্ট্রোল হাইড
                 playback: {
                     playInline: true,
                     recycleVideo: true
@@ -265,11 +298,11 @@
                 else item.classList.remove('active');
             });
 
-            showToast(channel.name);
+            showToast("প্লে হচ্ছে: " + channel.name);
             hideMenu();
         }
 
-        // মেনু ওপেন/ক্লোজ লজিক
+        // মেনু কন্ট্রোল
         function showMenu() {
             document.getElementById('menu-panel').classList.add('open');
             isMenuOpen = true;
@@ -278,8 +311,12 @@
             document.getElementById('menu-panel').classList.remove('open');
             isMenuOpen = false;
         }
+        function toggleMenu() {
+            if (isMenuOpen) hideMenu();
+            else showMenu();
+        }
 
-        // টোস্ট মেসেজ দেখানো
+        // টোস্ট মেসেজ
         function showToast(text) {
             const toast = document.getElementById('toast');
             toast.innerText = text;
@@ -287,36 +324,38 @@
             setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        // চ্যানেল লিস্ট তৈরি করা
+        // লিস্ট জেনারেট করা
         const channelListContainer = document.getElementById('channelList');
         channels.forEach((channel, index) => {
             const item = document.createElement('div');
             item.className = 'channel-item';
             item.innerText = channel.name;
-            item.addEventListener('click', () => playChannel(index));
+            item.addEventListener('click', (e) => {
+                e.stopPropagation(); // মেনুর ক্লিকের সাথে যাতে মেইন স্ক্রিনের ক্লিক কনফ্লিক্ট না করে
+                playChannel(index);
+            });
             channelListContainer.appendChild(item);
         });
 
-        // প্রথম চ্যানেলটি দিয়ে শুরু করা
+        // প্রথম চ্যানেল চালু করা
         playChannel(0);
 
 
-       // ================= পিসি মাউস ক্লিক এবং মোবাইল টাচ/সোয়াইপ লজিক =================
+        // ================= পিসি মাউস ক্লিক এবং মোবাইল টাচ/সোয়াইপ লজিক =================
         let touchstartX = 0;
         let touchendX = 0;
         let touchstartTime = 0;
         
         const playerWrapper = document.getElementById('player-wrapper');
 
-        // ১. পিসির জন্য: মাউসের বাম বাটনে ক্লিক করলে মেনু আসবে/যাবে
+        // পিসির জন্য: স্ক্রিনের যেকোনো জায়গায় বাম বাটনে ক্লিক করলে লিস্ট আসবে/যাবে
         playerWrapper.addEventListener('click', function(e) {
-            // যদি মোবাইল টাচ ইভেন্ট না হয় (অর্থাৎ পিসির মাউস ক্লিক হয়)
             if (e.pointerType !== 'touch') {
                 toggleMenu();
             }
         });
 
-        // ২. মোবাইলের জন্য: টাচ এবং সোয়াইপ হ্যান্ডলার
+        // মোবাইলের জন্য টাচ হ্যান্ডলার
         playerWrapper.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
             touchstartTime = new Date().getTime();
@@ -329,20 +368,11 @@
             handleGesture(touchDuration);
         }, { passive: true });
 
-        // মেনু টগল (আসা/যাওয়া) করার ফাংশন
-        function toggleMenu() {
-            if (isMenuOpen) {
-                hideMenu();
-            } else {
-                showMenu();
-            }
-        }
-
         function handleGesture(duration) {
-            const swipeThreshold = 50; // পিক্সেল
-            const clickTimeout = 250;  // মিলি-সেকেন্ড
+            const swipeThreshold = 50; 
+            const clickTimeout = 250;  
             
-            // মোবাইলে স্ক্রিনের মাঝখানে জাস্ট একটা ট্যাপ করলে
+            // মোবাইলে স্ক্রিনের মাঝখানে সিঙ্গেল ট্যাপ করলে
             if (Math.abs(touchstartX - touchendX) < 10 && duration < clickTimeout) {
                 toggleMenu();
                 return;
@@ -354,7 +384,7 @@
                 playChannel(next < channels.length ? next : 0);
             }
             
-            // বাম থেকে ডানে সোয়াইপ (Previous Channel)
+            //  বাম থেকে ডানে সোয়াইপ (Previous Channel)
             if (touchendX - touchstartX > swipeThreshold) {
                 let prev = currentChannelIndex - 1;
                 playChannel(prev >= 0 ? prev : channels.length - 1);
