@@ -301,46 +301,60 @@
         playChannel(0);
 
 
-        // ================= মোবাইল টাচ ও সোয়াইপ কন্ট্রোল লজিক (Touch Gesture) =================
+       // ================= পিসি মাউস ক্লিক এবং মোবাইল টাচ/সোয়াইপ লজিক =================
         let touchstartX = 0;
         let touchendX = 0;
         let touchstartTime = 0;
         
         const playerWrapper = document.getElementById('player-wrapper');
 
+        // ১. পিসির জন্য: মাউসের বাম বাটনে ক্লিক করলে মেনু আসবে/যাবে
+        playerWrapper.addEventListener('click', function(e) {
+            // যদি মোবাইল টাচ ইভেন্ট না হয় (অর্থাৎ পিসির মাউস ক্লিক হয়)
+            if (e.pointerType !== 'touch') {
+                toggleMenu();
+            }
+        });
+
+        // ২. মোবাইলের জন্য: টাচ এবং সোয়াইপ হ্যান্ডলার
         playerWrapper.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
-            touchstartTime = new Date().getTime(); // টাচ শুরুর সময়
+            touchstartTime = new Date().getTime();
         }, { passive: true });
 
         playerWrapper.addEventListener('touchend', e => {
             touchendX = e.changedTouches[0].screenX;
-            let touchDuration = new Date().getTime() - touchstartTime; // কতক্ষণ টাচ ছিল
+            let touchDuration = new Date().getTime() - touchstartTime;
             
             handleGesture(touchDuration);
         }, { passive: true });
 
+        // মেনু টগল (আসা/যাওয়া) করার ফাংশন
+        function toggleMenu() {
+            if (isMenuOpen) {
+                hideMenu();
+            } else {
+                showMenu();
+            }
+        }
+
         function handleGesture(duration) {
-            const swipeThreshold = 50; // কতটুকু টানলে সোয়াইপ কাউন্ট হবে (পিক্সেল)
-            const clickTimeout = 250;  // ২৫০ মিলি-সেকেন্ডের কম হলে সেটি ক্লিক/ট্যাপ হিসেবে গণ্য হবে
+            const swipeThreshold = 50; // পিক্সেল
+            const clickTimeout = 250;  // মিলি-সেকেন্ড
             
-            // ১. স্ক্রিনের মাঝখানে সিঙ্গেল ট্যাপ/টাচ করলে চ্যানেল লিস্ট আসবে-যাবে
+            // মোবাইলে স্ক্রিনের মাঝখানে জাস্ট একটা ট্যাপ করলে
             if (Math.abs(touchstartX - touchendX) < 10 && duration < clickTimeout) {
-                if (isMenuOpen) {
-                    hideMenu();
-                } else {
-                    showMenu();
-                }
-                return; // সোয়াইপ লজিক স্কিপ করার জন্য
+                toggleMenu();
+                return;
             }
             
-            // ২. ডান থেকে বামে সোয়াইপ (Next Channel)
+            // ডান থেকে বামে সোয়াইপ (Next Channel)
             if (touchstartX - touchendX > swipeThreshold) {
                 let next = currentChannelIndex + 1;
                 playChannel(next < channels.length ? next : 0);
             }
             
-            // ৩. বাম থেকে ডানে সোয়াইপ (Previous Channel)
+            // বাম থেকে ডানে সোয়াইপ (Previous Channel)
             if (touchendX - touchstartX > swipeThreshold) {
                 let prev = currentChannelIndex - 1;
                 playChannel(prev >= 0 ? prev : channels.length - 1);
