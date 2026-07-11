@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ইউনিভার্সাল টিভি রিমোট লাইভ প্লেয়ার</title>
+    <title>টিভি মাউস ফিক্স প্লেয়ার</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
@@ -24,7 +24,7 @@
             font-family: Arial, sans-serif;
         }
 
-        /* প্লেয়ার ফুল স্ক্রিন */
+        /* প্লেয়ার কন্টেইনার */
         #player-wrapper {
             width: 100% !important;
             height: 100% !important;
@@ -43,22 +43,33 @@
             height: 100% !important;
         }
 
+        /* স্ক্রিনের যেকোনো জায়গায় মাউস ক্লিক নেওয়ার জন্য একটি অদৃশ্য লেয়ার */
+        #click-catcher {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 500; /* ভিডিওর উপরে কিন্তু মেনুর নিচে */
+            background: transparent;
+        }
+
         /* চ্যানেল মেনু প্যানেল */
         #menu-panel {
             position: absolute;
             top: 0;
-            left: -100%; /* শুরুতে হাইড থাকবে */
+            left: -100%;
             width: 320px;
             height: 100%;
-            background: rgba(15, 15, 15, 0.95);
-            border-right: 2px solid #ff3b30;
-            z-index: 9999;
-            transition: left 0.25s ease-in-out;
+            background: rgba(15, 15, 15, 0.98);
+            border-right: 3px solid #ff3b30;
+            z-index: 9999 !important;
+            transition: left 0.2s ease;
             display: flex;
             flex-direction: column;
         }
         #menu-panel.open {
-            left: 0; /* রিমোটে ওকে চাপলে বাম থেকে আসবে */
+            left: 0;
         }
         .menu-header {
             padding: 25px 20px;
@@ -75,62 +86,42 @@
             padding: 15px;
         }
         .channel-item {
-            padding: 16px;
-            color: #aaa;
-            background: rgba(255,255,255,0.03);
-            margin-bottom: 10px;
-            border-radius: 8px;
-            font-size: 20px; /* টিভির জন্য ফন্ট বড় করা হয়েছে */
-            border: 2px solid transparent;
-            transition: all 0.1s ease;
-        }
-        /* রিমোটের আপ-ডাউন বাটন দিয়ে সিলেক্ট করলে (ফোকাস) */
-        .channel-item.focused {
-            background: #ffffff !important;
-            color: #000 !important;
-            border: 2px solid #ff3b30;
-            transform: scale(1.02);
-            font-weight: bold;
-        }
-        /* বর্তমানে যে চ্যানেলটি চলছে */
-        .channel-item.active {
-            background: rgba(255, 59, 48, 0.2);
-            color: #ff3b30;
-            border-left: 5px solid #ff3b30;
-        }
-
-        /* রিমোট গাইড পপআপ (টিভি চালু হলে দেখাবে রিমোটের কোন বাটনে কি কাজ) */
-        #remote-guide {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.8);
+            padding: 18px;
             color: #fff;
-            padding: 10px 15px;
-            border-radius: 6px;
-            font-size: 14px;
-            z-index: 5000;
-            border: 1px solid #444;
-            pointer-events: none;
+            background: #222;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            font-size: 22px;
+            text-align: center;
+            border: 2px solid #333;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        /* কার্সার উপরে নিলে বা সিলেক্ট হলে */
+        .channel-item:hover, .channel-item.focused {
+            background: #ff3b30 !important;
+            color: #fff !important;
+            border: 2px solid #fff;
+        }
+        .channel-item.active {
+            border-left: 8px solid #ff3b30;
+            background: #1a1a1a;
         }
 
         /* টোস্ট নোটিফিকেশন */
         #toast {
             position: absolute;
-            bottom: 50px;
+            bottom: 60px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 59, 48, 0.95);
+            background: #ff3b30;
             color: #fff;
-            padding: 14px 30px;
+            padding: 15px 35px;
             border-radius: 30px;
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             z-index: 6000;
             opacity: 0;
             transition: opacity 0.2s;
-            pointer-events: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
         #toast.show {
             opacity: 1;
@@ -139,105 +130,30 @@
 </head>
 <body>
 
-    <!-- রিমোট গাইড প্রম্পট -->
-    <div id="remote-guide">👉 রিমোটের OK চাপলে চ্যানেল লিস্ট আসবে।</div>
-
     <!-- Clappr প্লেয়ার -->
     <div id="player-wrapper"></div>
+    
+    <!-- মাউস ক্লিক ক্যাচার -->
+    <div id="click-catcher"></div>
 
     <!-- চ্যানেল মেনু -->
-    <div id="menu-panel" id="menuPanel">
+    <div id="menu-panel">
         <div class="menu-header">📺 চ্যানেল লিস্ট</div>
         <div class="channel-list" id="channelList"></div>
     </div>
 
-    <!-- টোস্ট নোটিফিকেশন -->
+    <!-- নোটিফিকেশন -->
     <div id="toast"></div>
 
     <script>
-        // চ্যানেল ডাটা
         const channels = [
-            { name: "T Sports HD", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN4/tracks-v1a1/mono.m3u8" },
-            { name: "T Sports HD", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN3/index.m3u8" },
-            { name: "T Sports HD", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8" },
-            { name: "Caze TV", url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8" },
-            { name: "BEIN 5 4K (RAW)", url: "https://node8.no-612.workers.dev/resource/MjQwNTk5MDY0MTY5OjI0MDU5OTA2NDE2OToxMjAzNTpsaXZl/index.m3u8" },
-            { name: "TSN 4 4K (RAW)", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN4/index.m3u8" },
-            { name: "ITV (RAW)", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/ITV1/tracks-v1a1/mono.m3u8" },
-            { name: "ditu", url: "https://vsd286.okcdn.ru/hls/18162457905692.m3u8/sig/_evTc7IM4fs/expires/1783539056596/srcIp/163.227.144.198/urls/185.226.55.84/clientType/0/srcAg/CHROME/mid/15732517117468/video.m3u8" },
-            { name: "Crichid Server", url: "https://crichd.johirxofficial.workers.dev/live/willowusa.m3u8" },
-            { name: "Bioscope", url: "https://fifa-stream-01.bioscopelive.com/out/v1/60e7608404004b1186261497b404630b/index.m3u8" },
-            { name: "I SCREEN HD", url: "https://tc-sg.rockstreamer.com/v1/019ed91616121ea540a8171c8e801f/019ed92ac80315fc600b1796d4ad8b/main.m3u8" },
-            { name: "4k Fox", url: "https://inproviszon.st/fox-usa.m3u8" },
-            { name: "4k TSN", url: "https://inproviszon.st/tsn1-ca.m3u8" },
-            { name: "4k Dazn", url: "https://inproviszon.st/daznmundial-es.m3u8" },
-            { name: "Toffee HSB", url: "https://hsb71.pages.dev/live.m3u8" },
-            { name: "Bein 4k", url: "https://next.badinan.xyz/nexttv/FHD/playlist.m3u8" },
-            { name: "TPV Sport", url: "https://1nyaler.streamhostingcdn.top/stream/89/index.m3u8" },
-            { name: "FOX HD", url: "https://a3285273028-s80718.cdn.ngenix.net/hls/CH_FAST_SPORTSHD/video_1920x1080_avc1/playlist.m3u8?profile=web_auto" },
-            { name: "Telemundo", url: "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8" },
-            { name: "Bein Sports Direct", url: "https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8" },
-            { name: "Sky Sports Cricket", url: "https://atc.hopto.org/sly-sprts-cricket-hd-sport/playlist.m3u8" },
-            { name: "Sangshod tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8" },
-            { name: "Ekattor TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
-            { name: "Channel-1", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
-            { name: "Channel 24", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
-            { name: "INDEPENDENT TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8" },
-            { name: "JAMUNA TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
-            { name: "Star News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/1710-audio_113402_eng=113200-video=3224800.m3u8" },
-            { name: "NEWS 24 HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8" },
-            { name: "DBC News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8" },
-            { name: "ATN NEWS [BD]", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8" },
-            { name: "NTV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8" },
-            { name: "Banglavision", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8" },
-            { name: "SATV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/index.m3u8" },
-            { name: "BOISHAKHI TV", url: "https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8" },
-            { name: "Channel I", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
-            { name: "Deepto TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8" },
-            { name: "Maasranga Tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
-            { name: "Channel 9", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8" },
-            { name: "ZB CINEMA", url: "https://server.zillarbarta.com/ZBCINEMA/index.m3u8" },
-            { name: "G-Serise", url: "https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8" },
-            { name: "Al Jazeera", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8" },
-            { name: "CNN", url: "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8" },
-            { name: "DW", url: "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8" },
-            { name: "Iran International", url: "https://dev-live.livetvstream.co.uk/LS-63503-4/chunklist_b1196000.m3u8" },
-            { name: "Saudi Quran", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8" },
-            { name: "Madina live", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8" },
-            { name: "Peace tv Bangla", url: "https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v3a1/mono.m3u8" },
-            { name: "Islamic tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8" },
-            { name: "SRK TV", url: "https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/tracks-v1a1/mono.m3u8" },
-            { name: "Travel xp", url: "https://travelxp-travelxp-1-eu.rakuten.wurl.tv/playlist.m3u8" },
-            { name: "Love nature", url: "https://cdn1.logichost.in/ajmantv/live/playlist.m3u8" },
-            { name: "Animal Planet HD", url: "https://tiger-hub.vercel.app@vodzong.mjunoon.tv:8087/streamtest/Animal-Planet-158-3/playlist.m3u8" },
-            { name: "Star Jalsha HD", url: "https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8" },
-            { name: "Zee Bangla HD", url: "https://yupptvcatchupire.yuppcdn.net/preview/zeebangla/2500.m3u8" },
-            { name: "Zee Bangla Cinema", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8" },
-            { name: "BANGLA+ HD", url: "https://live-stream.utkalbongo.com/hls/livebanglatvstream.m3u8" },
-            { name: "Colors Bangla", url: "https://yupptvcatchupire.yuppcdn.net/preview/colorsbanglahd/800.m3u8" },
-            { name: "Colors Bangla 2", url: "https://catchup.yuppcdn.net/amazonv2/36/preview/colorsbanglahd/master/chunklist.m3u8" },
-            { name: "Enter 10", url: "https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_720p/chunks.m3u8" },
-            { name: "ARY Digital", url: "https://ml-pull-dvc-myco.io:2096/ARY_DIGITAL/index.m3u8" },
-            { name: "HUM TV", url: "https://ml-pull-dvc-myco.io:2096/HUM_ENTERTAINMENT/index.m3u8" },
-            { name: "JIO KHANI", url: "https://s3.ideationtec.live/GEO_Entertainment/GEO_Entertainment.m3u8" },
-            { name: "DD Bangla", url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/7ff57cc9046b4c188b51a0d506f36e7f/index_3.m3u8" },
-            { name: "Enter 10 Bangla", url: "https://amg01448-samsungin-enterr10bangla-samsungin-ad-gg.amagi.tv/playlist/amg01448-samsungin-enterr10bangla-samsungin/playlist.m3u8" },
-            { name: "Republic Bangla", url: "https://vg-republictvlive.akamaized.net/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-456368/06e5afc2-a022-4e51-9131-4e33a6207c5c/1.m3u8" },
-            { name: "News18 Bangla News", url: "https://amg01448-samsungin-news18bangla-samsungin-ad-qy.amagi.tv/playlist/amg01448-samsungin-news18bangla-samsungin/playlist.m3u8" },
-            { name: "TV9 Bangla", url: "https://amg01448-samsungin-tv9bangla-samsungin-9lgnh.amagi.tv/playlist/amg01448-samsungin-tv9bangla-samsungin/playlist.m3u8" },
-            { name: "Orange Bangla", url: "https://cdn-4.pishow.tv/live/1499/1499_2.m3u8" },
-            { name: "R Plus", url: "https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8" },
-            { name: "R Plus Gould", url: "https://cdn-4.pishow.tv/live/1231/1231_2.m3u8" },
-            { name: "Sangeet Bangla", url: "https://cdn-4.pishow.tv/live/1143/master.m3u8" },
-            { name: "Zoom", url: "https://pubads.g.doubleclick.net/ssai/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8" },
-            { name: "Music India", url: "https://cdn-2.pishow.tv/live/226/master.m3u8" },
-            { name: "8X music", url: "https://ml-pull-dvc-myco.io:2096/8XM_MUSIC/index.m3u8" },
-            { name: "ICC_9XM", url: "https://wiselp.wiseplayout.com/9XM/HD1080/HD1080.m3u8" }
+            { name: "T Sports Live", url: "https://biostartvworld.pages.dev/api/t-sports.m3u8?key=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTAzLjE2NS45My4zMTo4MDk1L3RzcG9ydHMvdHJhY2tzLXYxYTFhMi9tb25vLm0zdTg" },
+            { name: "চ্যানেল ২", url: "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8" },
+            { name: "চ্যানেল ৩", url: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8" }
         ];
 
         let player;
-        let currentChannelIndex = 0; // বর্তমানে কোন চ্যানেল চলছে
-        let focusedIndex = 0;        // মেনুর ভেতর রিমোটের লাল ফোকাস কোথায় আছে
+        let currentChannelIndex = 0;
         let isMenuOpen = false;
 
         function initPlayer(url) {
@@ -264,21 +180,23 @@
                 initPlayer(channel.url);
             }
 
-            // অ্যাক্টিভ চ্যানেল মার্ক করা
             document.querySelectorAll('.channel-item').forEach((item, i) => {
                 if (i === index) item.classList.add('active');
                 else item.classList.remove('active');
             });
 
-            showToast("প্লে হচ্ছে: " + channel.name);
+            showToast(channel.name);
             hideMenu();
+        }
+
+        function toggleMenu() {
+            if (isMenuOpen) hideMenu();
+            else showMenu();
         }
 
         function showMenu() {
             document.getElementById('menu-panel').classList.add('open');
             isMenuOpen = true;
-            focusedIndex = currentChannelIndex; // মেনু খুললে রানিং চ্যানেলের ওপর ফোকাস যাবে
-            updateFocusUI();
         }
         
         function hideMenu() {
@@ -290,94 +208,51 @@
             const toast = document.getElementById('toast');
             toast.innerText = text;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            setTimeout(() => toast.classList.remove('show'), 2000);
         }
 
-        // রিমোট ফোকাস ইন্টারফেস আপডেট ও অটো-স্ক্রলিং লজিক
-        function updateFocusUI() {
-            const items = document.querySelectorAll('.channel-item');
-            items.forEach((item, i) => {
-                if (i === focusedIndex) {
-                    item.classList.add('focused');
-                    // রিমোট দিয়ে নিচে নামলে যেন মেনু অটো স্ক্রল হয়
-                    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-                } else {
-                    item.classList.remove('focused');
-                }
-            });
-        }
-
-        // চ্যানেল লিস্ট রেন্ডার
+        // চ্যানেল লিস্ট তৈরি (Hover এবং Click দুটোই সাপোর্ট করবে)
         const channelListContainer = document.getElementById('channelList');
         channels.forEach((channel, index) => {
             const item = document.createElement('div');
             item.className = 'channel-item';
             item.innerText = channel.name;
+            
+            // মাউসের ডট উপরে নিয়ে ক্লিক করলে
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                playChannel(index);
+            });
+            
             channelListContainer.appendChild(item);
         });
 
-        // অটো গাইড ৫ সেকেন্ড পর গায়েব হবে
-        setTimeout(() => {
-            document.getElementById('remote-guide').style.display = 'none';
-        }, 6000);
+        // ফুল স্ক্রিনে মাউসের ডট দিয়ে যেকোনো জায়গায় ১ বার ক্লিক করলে মেনু আসবে/যাবে
+        document.getElementById('click-catcher').addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleMenu();
+        });
 
-        // প্রথম চ্যানেল চালু করা
+        // প্রথম চ্যানেল প্লে
         playChannel(0);
 
-
-        // ================== ১০০% ইউনিভার্সাল রিমোট কি-বোর্ড লজিক ==================
-        document.addEventListener('keydown', function(e) {
-            // ইউনিভার্সাল রিমোটের বিভিন্ন ব্র্যান্ডের কী-কোড ম্যাপিং
-            const keyCode = e.keyCode || e.which;
-            
-            // কি-কোড লিস্ট (টিভি ও অ্যান্ড্রয়েড স্ট্যান্ডার্ড)
-            const KEY_UP = 38;
-            const KEY_DOWN = 40;
-            const KEY_LEFT = 37;
-            const KEY_RIGHT = 39;
-            const KEY_ENTER = 13;
-            const KEY_BACK = 27;     // ESC / Universal Back
-            const KEY_ANDROID_BACK = 4; // Pure Android Remote Back
-            
-            // রিমোটের যেকোনো বোতাম চাপলে মাউসের ফ্রিজ অবস্থা কেটে কোড কাজ শুরু করবে
-            e.preventDefault(); 
-
-            if (isMenuOpen) {
-                // ১. মেনু খোলা থাকা অবস্থায় রিমোটের কাজ:
-                if (keyCode === KEY_UP) { 
-                    // ওপরের বাটন চাপলে
-                    focusedIndex = (focusedIndex > 0) ? focusedIndex - 1 : channels.length - 1;
-                    updateFocusUI();
-                } 
-                else if (keyCode === KEY_DOWN) { 
-                    // নিচের বাটন চাপলে
-                    focusedIndex = (focusedIndex < channels.length - 1) ? focusedIndex + 1 : 0;
-                    updateFocusUI();
-                } 
-                else if (keyCode === KEY_ENTER) { 
-                    // মাঝখানের গোল ওকে (OK) বাটন চাপলে চ্যানেল প্লে হবে
-                    playChannel(focusedIndex);
-                } 
-                else if (keyCode === KEY_LEFT || keyCode === KEY_BACK || keyCode === KEY_ANDROID_BACK) { 
-                    // বামে চাপলে বা ব্যাক বাটন চাপলে মেনু বন্ধ হবে
-                    hideMenu();
-                }
+        // ================== এয়ার মাউস / ফ্রিজ রিমোট ফিক্সার ==================
+        
+        // ট্রিক ১: যদি মাউস মোডে রিমোটের বাটনে চাপ দেওয়ার পর তা মাউস হুইল (Scroll) হিসেবে কাজ করে
+        window.addEventListener('wheel', function(e) {
+            if (!isMenuOpen) {
+                showMenu();
             } else {
-                // ২. ফুল স্ক্রিন ভিডিও চলাকালীন রিমোটের কাজ:
-                if (keyCode === KEY_ENTER || keyCode === KEY_UP || keyCode === KEY_DOWN) {
-                    // ভিডিও চলাকালীন OK, Up বা Down চাপলেই চ্যানেল লিস্ট স্ক্রিনে চলে আসবে
-                    showMenu();
-                }
-                else if (keyCode === KEY_RIGHT) {
-                    // ডান পাশের বাটন চাপলে সরাসরি পরের চ্যানেলে চলে যাবে (মেনু খোলা ছাড়াই)
-                    let next = currentChannelIndex + 1;
-                    playChannel(next < channels.length ? next : 0);
-                }
-                else if (keyCode === KEY_LEFT) {
-                    // বাম পাশের বাটন চাপলে সরাসরি আগের চ্যানেলে চলে যাবে
-                    let prev = currentChannelIndex - 1;
-                    playChannel(prev >= 0 ? prev : channels.length - 1);
-                }
+                // মেনু খোলা থাকলে আপ-ডাউন স্ক্রল করাবে
+                document.querySelector('.channel-list').scrollTop += e.deltaY;
+            }
+        });
+
+        // ট্রিক ২: ইউনিভার্সাল কিবোর্ড ইভেন্ট ব্যাকআপ (যদি মাউস মোড ছাড়া কাজ করে)
+        document.addEventListener('keydown', function(e) {
+            const code = e.keyCode || e.which;
+            if (code === 13 || code === 38 || code === 40 || code === 37 || code === 39) {
+                if (!isMenuOpen) showMenu();
             }
         });
         // =========================================================================
