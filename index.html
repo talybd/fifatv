@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maruf IPTV Pro</title>
+    <title>Maruf IPTV Pro - Left Sidebar</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
@@ -24,7 +24,7 @@
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
-        /* প্লেয়ার কন্টেইনার - আল্ট্রা ফিট */
+        /* প্লেয়ার কন্টেইনার */
         #player-wrapper {
             width: 100% !important;
             height: 100% !important;
@@ -37,88 +37,84 @@
         #player-wrapper video {
             width: 100% !important;
             height: 100% !important;
-            object-fit: fill !important; /* সব স্ক্রিন জুড়ে অটো ফিট */
+            object-fit: fill !important; /* ফুল স্ক্রিন অটো ফিট */
         }
         [data-player] {
             width: 100% !important;
             height: 100% !important;
         }
 
-        /* 💎 আল্ট্রা প্রফেশনাল কাচের মতো চ্যানেল মেনু (সেন্টার থিয়েটার ওএসডি) */
+        /* 💎 বাম পাশের প্রিমিয়াম গ্লাস চ্যানেল মেনু প্যানেল */
         #menu-panel {
             position: absolute;
             top: 0;
-            left: 0;
-            width: 100%;
+            left: -320px; /* শুরুতে বামে লুকিয়ে থাকবে */
+            width: 320px;
             height: 100%;
-            background: rgba(10, 15, 30, 0.7); /* ডার্ক লাক্সারি ওভারলে */
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
+            background: rgba(10, 15, 30, 0.75); /* ডার্ক লাক্সারি কাচ */
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
             z-index: 10;
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: scale(1.05);
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #menu-panel.open {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
+            left: 0; /* স্ক্রিনে আসলে বাম পাশে সেট হবে */
         }
         .menu-header {
+            padding: 25px 20px;
             color: #fff;
-            font-size: 26px;
+            font-size: 20px;
             font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
         }
         .menu-header span {
             color: #3b82f6;
+            display: block;
+            font-size: 12px;
+            margin-top: 4px;
         }
         
-        /* গ্রিড লেআউট - সব ডিভাইসে রেসপনসিভ দেখাবে */
+        /* চ্যানেল লিস্টের ভার্টিকাল স্ক্রোল ভিউ */
         .channel-list {
-            width: 90%;
-            max-width: 1100px;
-            height: 65%;
+            flex: 1;
             overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 15px;
-            padding: 20px;
+            padding: 15px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        /* 💎 প্রিমিয়াম চ্যানেল কার্ড ডিজাইন */
+        /* 💎 প্রিমিয়াম চ্যানেল আইটেম ডিজাইন */
         .channel-item {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            padding: 14px;
             color: #e2e8f0;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.2s ease;
         }
         .channel-item .ch-num {
             background: rgba(255, 255, 255, 0.1);
             color: #94a3b8;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: bold;
-            padding: 4px 8px;
+            padding: 3px 7px;
             border-radius: 6px;
+            min-width: 28px;
+            text-align: center;
         }
         .channel-item .ch-name {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 500;
             white-space: nowrap;
             overflow: hidden;
@@ -127,10 +123,10 @@
         
         /* পিসি হোভার এবং টিভি রিমোট ফোকাস ইফেক্ট */
         .channel-item:hover, .channel-item.focused {
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.15);
             border-color: #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
+            transform: translateX(4px); /* আলতো ডানদিকে সরবে */
             color: #fff;
         }
         
@@ -138,7 +134,7 @@
         .channel-item.active {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
             border-color: #60a5fa;
-            box-shadow: 0 4px 25px rgba(37, 99, 235, 0.5);
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
             color: #fff;
             font-weight: bold;
         }
@@ -168,8 +164,8 @@
         #osd-alert.show { opacity: 1; }
 
         /* কাস্টম স্ক্রোলবার */
-        .channel-list::-webkit-scrollbar { width: 6px; }
-        .channel-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        .channel-list::-webkit-scrollbar { width: 4px; }
+        .channel-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -177,9 +173,9 @@
     <!-- লাইভ ভিডিও প্লেয়ার -->
     <div id="player-wrapper"></div>
 
-    <!-- লাক্সারি থিয়েটার মেনু -->
+    <!-- বাম পাশের লাক্সারি সাইডবার মেনু -->
     <div id="menu-panel" id="menuPanel">
-        <div class="menu-header">📺 MARUF <span>IPTV PREMIUM</span></div>
+        <div class="menu-header">📺 MARUF IPTV <span>PREMIUM LIVE TV</span></div>
         <div class="channel-list" id="channelList"></div>
     </div>
 
@@ -189,107 +185,93 @@
     <script>
         // আপনার প্লেলিস্টের সকল লাইভ চ্যানেল (ইন-অ্যাক্টিভ বা ডেড ইউআরএল স্বয়ংক্রিয়ভাবে ফিল্টার হবে)
         const allChannels = [
-  { name: "T Sports HD", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8" },
-  { name: "Caze TV", url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8" },
-  { name: "BEIN 5 4K (RAW)", url: "https://node8.no-612.workers.dev/resource/MjQwNTk5MDY0MTY5OjI0MDU5OTA2NDE2OToxMjAzNTpsaXZl/index.m3u8" },
-  { name: "TSN 4 4K (RAW)", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN4/index.m3u8" },
-  { name: "ITV (RAW)", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/ITV1/tracks-v1a1/mono.m3u8" },
-  { name: "ditu", url: "https://vsd286.okcdn.ru/hls/18162457905692.m3u8/sig/_evTc7IM4fs/expires/1783539056596/srcIp/163.227.144.198/urls/185.226.55.84/clientType/0/srcAg/CHROME/mid/15732517117468/video.m3u8" },
-  { name: ".", url: "https://pullsgp.yyzb456.top/live/stream-698168_lhd.m3u8" },
-  { name: "Crichid Server", url: "https://crichd.johirxofficial.workers.dev/live/willowusa.m3u8" },
-  { name: "Bioscope", url: "https://fifa-stream-01.bioscopelive.com/out/v1/60e7608404004b1186261497b404630b/index.m3u8" },
-  { name: "I SCREEN HD", url: "https://tc-sg.rockstreamer.com/v1/019ed91616121ea540a8171c8e801f/019ed92ac80315fc600b1796d4ad8b/main.m3u8" },
-  { name: "Unknown Name", url: "https://edge22.776740.ir.cdn.ir/hls2/tv3.m3u8" },
-  { name: "4k", url: "https://inproviszon.st/fox-usa.m3u8" },
-  { name: "4k", url: "https://inproviszon.st/tsn1-ca.m3u8" },
-  { name: "4k", url: "https://inproviszon.st/daznmundial-es.m3u8" },
-  { name: "toffee", url: "https://hsb71.pages.dev/live.m3u8" },
-  { name: "Bein 4k", url: "https://next.badinan.xyz/nexttv/FHD/playlist.m3u8" },
-  { name: "Unknown", url: "https://d2396zb8liu8hs.cloudfront.net/v1/manifest/9d062541f2ff39b5c0f48b743c6411d25f62fc25/DistroTV-MuxIP-SportsFirstTV/e829c0c5-6a7e-4f52-81c3-2f27aace876a/0.m3u8" },
-  { name: "Bein 4k", url: "https://streamsports.site/api/stream-proxy?url=http%3A%2F%2Fstarhub.pro%2Flive%2Ffarhat-3379%2F67897-913379%2F745270.ts" },
-  { name: "Unknown Name", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/1720-audio_113502_eng=113200-video=2407200.m3u8" },
-  { name: "y", url: "https://hls.diptom3ow.workers.dev/r/https%3A%2F%2Ffifa-stream-01.bioscopelive.com%2Fout%2Fv1%2F60e7608404004b1186261497b404630b%2Findex_1.m3u8" },
-  { name: "TPV Sport", url: "https://1nyaler.streamhostingcdn.top/stream/89/index.m3u8" },
-  { name: "Caze TV Brazil", url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8" },
-  { name: "FOX HD", url: "https://a3285273028-s80718.cdn.ngenix.net/hls/CH_FAST_SPORTSHD/video_1920x1080_avc1/playlist.m3u8?profile=web_auto" },
-  { name: "Telemundo", url: "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8" },
-  { name: "Bein Sports Direct", url: "https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8" },
-  { name: "Sky Sports Cricket", url: "https://atc.hopto.org/sly-sprts-cricket-hd-sport/playlist.m3u8" },
-  { name: "Live Sports-5", url: "https://ranapkbd.site/JOIN@RANAPK33/XT/play.m3u8?id=146122" },
-  { name: "Sangshod tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8" },
-  { name: "Ekattor TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
-  { name: "Channel-1", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
-  { name: "Channel 24", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
-  { name: "INDEPENDENT TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8" },
-  { name: "JAMUNA TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
-  { name: "Star News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/1710-audio_113402_eng=113200-video=3224800.m3u8" },
-  { name: "NEWS 24 HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8" },
-  { name: "DBC News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8" },
-  { name: "ATN NEWS [BD]", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8" },
-  { name: "NTV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8" },
-  { name: "RTV", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/rtv-sg.stream/tracks-v1a1/mono.m3u8" },
-  { name: "Banglavision", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8" },
-  { name: "SATV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/index.m3u8" },
-  { name: "BOISHAKHI TV", url: "https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8" },
-  { name: "Channel I", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
-  { name: "Deepto TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8" },
-  { name: "Maasranga Tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
-  { name: "Channel 9", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8" },
-  { name: "ZB CINEMA", url: "https://server.zillarbarta.com/ZBCINEMA/index.m3u8" },
-  { name: "GAZI TV", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/gazibdz.stream/tracks-v1a1/mono.m3u8" },
-  { name: "Desh TV", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/deshtv.stream/tracks-v1/mono.m3u8" },
-  { name: "MY TV HD", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/mytv-up-off.stream/tracks-v1a1/mono.m3u8" },
-  { name: "Green tv", url: "https://app.ncare.live/c3VydmVyX8RpbEU9Mi8xNy8yMDE0GIDU6RgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcGVMZEJCTEFWeVN3PTOmdFsaWRtaW51aiPhnPTI2/greentv.stream/live-orgin/greentv.stream/chunks.m3u8" },
-  { name: "G-Serise", url: "https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8" },
-  { name: "Al Jazeera", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8" },
-  { name: "CNN", url: "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8" },
-  { name: "DW", url: "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8" },
-  { name: "Iran International", url: "https://dev-live.livetvstream.co.uk/LS-63503-4/chunklist_b1196000.m3u8" },
-  { name: "Saudi Quran", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8" },
-  { name: "Madina live", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8" },
-  { name: "Peace tv Bangla", url: "https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v3a1/mono.m3u8" },
-  { name: "Islamic tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8" },
-  { name: "SRK TV", url: "https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/tracks-v1a1/mono.m3u8" },
-  { name: "Travel xp", url: "https://travelxp-travelxp-1-eu.rakuten.wurl.tv/playlist.m3u8" },
-  { name: "Love nature", url: "https://cdn1.logichost.in/ajmantv/live/playlist.m3u8" },
-  { name: "Animal Planet HD", url: "https://tiger-hub.vercel.app@vodzong.mjunoon.tv:8087/streamtest/Animal-Planet-158-3/playlist.m3u8" },
-  { name: "Star Jalsha HD", url: "https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8" },
-  { name: "Zee Bangla HD", url: "https://yupptvcatchupire.yuppcdn.net/preview/zeebangla/2500.m3u8" },
-  { name: "Zee Bangla Cinema", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8" },
-  { name: "BANGLA+ HD", url: "https://live-stream.utkalbongo.com/hls/livebanglatvstream.m3u8" },
-  { name: "Colors Bangla", url: "https://yupptvcatchupire.yuppcdn.net/preview/colorsbanglahd/800.m3u8" },
-  { name: "Colors Bangla", url: "https://catchup.yuppcdn.net/amazonv2/36/preview/colorsbanglahd/master/chunklist.m3u8" },
-  { name: "Enter 10", url: "https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_720p/chunks.m3u8" },
-  { name: "ARY Digital", url: "https://ml-pull-dvc-myco.io:2096/ARY_DIGITAL/index.m3u8" },
-  { name: "HUM TV", url: "https://ml-pull-dvc-myco.io:2096/HUM_ENTERTAINMENT/index.m3u8" },
-  { name: "JIO KHANI", url: "https://s3.ideationtec.live/GEO_Entertainment/GEO_Entertainment.m3u8" },
-  { name: "DD Bangla", url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/7ff57cc9046b4c188b51a0d506f36e7f/index_3.m3u8" },
-  { name: "Enter 10 Bangla", url: "https://amg01448-samsungin-enterr10bangla-samsungin-ad-gg.amagi.tv/playlist/amg01448-samsungin-enterr10bangla-samsungin/playlist.m3u8" },
-  { name: "Republic Bangla", url: "https://vg-republictvlive.akamaized.net/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-456368/06e5afc2-a022-4e51-9131-4e33a6207c5c/1.m3u8" },
-  { name: "News18 Bangla News", url: "https://amg01448-samsungin-news18bangla-samsungin-ad-qy.amagi.tv/playlist/amg01448-samsungin-news18bangla-samsungin/playlist.m3u8" },
-  { name: "TV9 Bangla", url: "https://amg01448-samsungin-tv9bangla-samsungin-9lgnh.amagi.tv/playlist/amg01448-samsungin-tv9bangla-samsungin/playlist.m3u8" },
-  { name: "Orange Bangla", url: "https://cdn-4.pishow.tv/live/1499/1499_2.m3u8" },
-  { name: "R Plus", url: "https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8" },
-  { name: "R Plus Gould", url: "https://cdn-4.pishow.tv/live/1231/1231_2.m3u8" },
-  { name: "Channel-16", url: "https://app24.jagobd.com.bd/c3VydmVyX8RpbEU9Mi8xNy8yMFDEEHGcfRgzQ6NTAgdEoaeFzbF92YWxIZTO0U0ezN1IzMyfvcEdsEfeDeKiNkVN3PTOmdFseWRtaW51aiPhnPTI2/channel16bd.stream/tracks-v1a1/mono.m3u8" },
-  { name: "Sangeet Bangla", url: "https://cdn-4.pishow.tv/live/1143/master.m3u8" },
-  { name: "Zoom", url: "https://pubads.g.doubleclick.net/ssai/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8" },
-  { name: "Music India", url: "https://cdn-2.pishow.tv/live/226/master.m3u8" },
-  { name: "8X music", url: "https://ml-pull-dvc-myco.io:2096/8XM_MUSIC/index.m3u8" },
-  { name: "ICC_9XM", url: "https://wiselp.wiseplayout.com/9XM/HD1080/HD1080.m3u8" }
-]
+            { name: "PTV", url: "https://raw.githubusercontent.com/IPTVFlixBD/OopsTv/refs/heads/main/sps1/809398.m3u8" },
+            { name: "T Sports HD", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8" },
+            { name: "Caze TV", url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8" },
+            { name: "BEIN 5 4K (RAW)", url: "https://node8.no-612.workers.dev/resource/MjQwNTk5MDY0MTY5OjI0MDU5OTA2NDE2OToxMjAzNTpsaXZl/index.m3u8" },
+            { name: "TSN 4 4K (RAW)", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN4/index.m3u8" },
+            { name: "ITV (RAW)", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/ITV1/tracks-v1a1/mono.m3u8" },
+            { name: "ditu", url: "https://vsd286.okcdn.ru/hls/18162457905692.m3u8/sig/_evTc7IM4fs/expires/1783539056596/srcIp/163.227.144.198/urls/185.226.55.84/clientType/0/srcAg/CHROME/mid/15732517117468/video.m3u8" },
+            { name: "Crichid Server", url: "https://crichd.johirxofficial.workers.dev/live/willowusa.m3u8" },
+            { name: "Bioscope", url: "https://fifa-stream-01.bioscopelive.com/out/v1/60e7608404004b1186261497b404630b/index.m3u8" },
+            { name: "I SCREEN HD", url: "https://tc-sg.rockstreamer.com/v1/019ed91616121ea540a8171c8e801f/019ed92ac80315fc600b1796d4ad8b/main.m3u8" },
+            { name: "4k Fox", url: "https://inproviszon.st/fox-usa.m3u8" },
+            { name: "4k TSN", url: "https://inproviszon.st/tsn1-ca.m3u8" },
+            { name: "4k Dazn", url: "https://inproviszon.st/daznmundial-es.m3u8" },
+            { name: "Toffee HSB", url: "https://hsb71.pages.dev/live.m3u8" },
+            { name: "Bein 4k", url: "https://next.badinan.xyz/nexttv/FHD/playlist.m3u8" },
+            { name: "TPV Sport", url: "https://1nyaler.streamhostingcdn.top/stream/89/index.m3u8" },
+            { name: "FOX HD", url: "https://a3285273028-s80718.cdn.ngenix.net/hls/CH_FAST_SPORTSHD/video_1920x1080_avc1/playlist.m3u8?profile=web_auto" },
+            { name: "Telemundo", url: "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8" },
+            { name: "Bein Sports Direct", url: "https://1nyaler.streamhostingcdn.top/stream/23/index.m3u8" },
+            { name: "Sky Sports Cricket", url: "https://atc.hopto.org/sly-sprts-cricket-hd-sport/playlist.m3u8" },
+            { name: "Sangshod tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8" },
+            { name: "Ekattor TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
+            { name: "Channel-1", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
+            { name: "Channel 24", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
+            { name: "INDEPENDENT TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8" },
+            { name: "JAMUNA TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
+            { name: "Star News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/1710-audio_113402_eng=113200-video=3224800.m3u8" },
+            { name: "NEWS 24 HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8" },
+            { name: "DBC News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8" },
+            { name: "ATN NEWS [BD]", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8" },
+            { name: "NTV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8" },
+            { name: "Banglavision", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8" },
+            { name: "SATV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1720/output/index.m3u8" },
+            { name: "BOISHAKHI TV", url: "https://boishakhi.sonarbanglatv.com/boishakhi/boishakhitv/index.m3u8" },
+            { name: "Channel I", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
+            { name: "Deepto TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8" },
+            { name: "Maasranga Tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
+            { name: "Channel 9", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8" },
+            { name: "ZB CINEMA", url: "https://server.zillarbarta.com/ZBCINEMA/index.m3u8" },
+            { name: "G-Serise", url: "https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8" },
+            { name: "Al Jazeera", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8" },
+            { name: "CNN", url: "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8" },
+            { name: "DW", url: "https://dwamdstream102.akamaized.net/hls/live/2015525/dwstream102/index.m3u8" },
+            { name: "Iran International", url: "https://dev-live.livetvstream.co.uk/LS-63503-4/chunklist_b1196000.m3u8" },
+            { name: "Saudi Quran", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8" },
+            { name: "Madina live", url: "https://cdn-globecast.akamaized.net/live/eds/saudi_sunnah/hls_roku/index.m3u8" },
+            { name: "Peace tv Bangla", url: "https://dzkyvlfyge.erbvr.com/PeaceTvBangla/tracks-v3a1/mono.m3u8" },
+            { name: "Islamic tv", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8" },
+            { name: "SRK TV", url: "https://srknowapp.ncare.live/srktvhlswodrm/srktv.stream/tracks-v1a1/mono.m3u8" },
+            { name: "Travel xp", url: "https://travelxp-travelxp-1-eu.rakuten.wurl.tv/playlist.m3u8" },
+            { name: "Love nature", url: "https://cdn1.logichost.in/ajmantv/live/playlist.m3u8" },
+            { name: "Animal Planet HD", url: "https://tiger-hub.vercel.app@vodzong.mjunoon.tv:8087/streamtest/Animal-Planet-158-3/playlist.m3u8" },
+            { name: "Star Jalsha HD", url: "https://yupptvcatchupire.yuppcdn.net/preview/starjalsha/1800.m3u8" },
+            { name: "Zee Bangla HD", url: "https://yupptvcatchupire.yuppcdn.net/preview/zeebangla/2500.m3u8" },
+            { name: "Zee Bangla Cinema", url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/ColorsHD.m3u8" },
+            { name: "BANGLA+ HD", url: "https://live-stream.utkalbongo.com/hls/livebanglatvstream.m3u8" },
+            { name: "Colors Bangla", url: "https://yupptvcatchupire.yuppcdn.net/preview/colorsbanglahd/800.m3u8" },
+            { name: "Colors Bangla 2", url: "https://catchup.yuppcdn.net/amazonv2/36/preview/colorsbanglahd/master/chunklist.m3u8" },
+            { name: "Enter 10", url: "https://live-bangla.akamaized.net/liveabr/pub-iobanglakp3sff/live_720p/chunks.m3u8" },
+            { name: "ARY Digital", url: "https://ml-pull-dvc-myco.io:2096/ARY_DIGITAL/index.m3u8" },
+            { name: "HUM TV", url: "https://ml-pull-dvc-myco.io:2096/HUM_ENTERTAINMENT/index.m3u8" },
+            { name: "JIO KHANI", url: "https://s3.ideationtec.live/GEO_Entertainment/GEO_Entertainment.m3u8" },
+            { name: "DD Bangla", url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/7ff57cc9046b4c188b51a0d506f36e7f/index_3.m3u8" },
+            { name: "Enter 10 Bangla", url: "https://amg01448-samsungin-enterr10bangla-samsungin-ad-gg.amagi.tv/playlist/amg01448-samsungin-enterr10bangla-samsungin/playlist.m3u8" },
+            { name: "Republic Bangla", url: "https://vg-republictvlive.akamaized.net/v1/manifest/611d79b11b77e2f571934fd80ca1413453772ac7/vglive-sk-456368/06e5afc2-a022-4e51-9131-4e33a6207c5c/1.m3u8" },
+            { name: "News18 Bangla News", url: "https://amg01448-samsungin-news18bangla-samsungin-ad-qy.amagi.tv/playlist/amg01448-samsungin-news18bangla-samsungin/playlist.m3u8" },
+            { name: "TV9 Bangla", url: "https://amg01448-samsungin-tv9bangla-samsungin-9lgnh.amagi.tv/playlist/amg01448-samsungin-tv9bangla-samsungin/playlist.m3u8" },
+            { name: "Orange Bangla", url: "https://cdn-4.pishow.tv/live/1499/1499_2.m3u8" },
+            { name: "R Plus", url: "https://thelegitpro.in/pntv/rplusnews24x7/tracks-v1a1/mono.m3u8" },
+            { name: "R Plus Gould", url: "https://cdn-4.pishow.tv/live/1231/1231_2.m3u8" },
+            { name: "Sangeet Bangla", url: "https://cdn-4.pishow.tv/live/1143/master.m3u8" },
+            { name: "Zoom", url: "https://pubads.g.doubleclick.net/ssai/event/JCAm25qkRXiKcK1AJMlvKQ/master.m3u8" },
+            { name: "Music India", url: "https://cdn-2.pishow.tv/live/226/master.m3u8" },
+            { name: "8X music", url: "https://ml-pull-dvc-myco.io:2096/8XM_MUSIC/index.m3u8" },
+            { name: "ICC_9XM", url: "https://wiselp.wiseplayout.com/9XM/HD1080/HD1080.m3u8" }
+        ];
 
-        let channels = []; // শুধুমাত্র অ্যাক্টিভ চ্যানেলগুলো এখানে ফিল্টার হয়ে জমা হবে
+        let channels = []; // শুধুমাত্র অ্যাক্টিভ চ্যানেল ফিল্টার হবে
         let player;
         let currentChannelIndex = 0;
         let focusedChannelIndex = 0;
         let isMenuOpen = true;
 
-        // 🛡️ ফিল্টারিং লজিক: ইন-অ্যাক্টিভ ও ডেড লিংক বাদ দেওয়া
+        // 🛡️ ইন-অ্যাক্টিভ ও ডেড লিংক ফিল্টারিং লজিক
         function validateAndBuildChannels() {
             let validCount = 1;
             allChannels.forEach((ch) => {
-                // যে লিংকগুলো ফাঁকা, কর্স প্রক্সি ছাড়া ডেড বা ভুল ফরম্যাট সেগুলোকে ফিল্টার করা হচ্ছে
                 if(ch.url && !ch.url.includes("cors-proxy") && !ch.name.includes("Unknown")) {
                     channels.push({
                         id: validCount - 1,
@@ -302,7 +284,7 @@
             renderChannels();
         }
 
-        // এইচটিএমএল-এ প্রফেশনাল গ্রিড লিস্ট তৈরি
+        // সাইডবারে চ্যানেল লিস্ট তৈরি
         function renderChannels() {
             const listContainer = document.getElementById('channelList');
             listContainer.innerHTML = "";
@@ -318,7 +300,6 @@
                 listContainer.appendChild(card);
             });
             
-            // প্রথম অ্যাক্টিভ চ্যানেল প্লে করা
             if(channels.length > 0) initPlayer(channels[0].url);
         }
 
@@ -330,7 +311,7 @@
                 width: "100%",
                 height: "100%",
                 autoPlay: true,
-                chromeless: true, // ফুল ক্লিয়ার স্ক্রিন
+                chromeless: true,
                 playback: { playInline: true, recycleVideo: true }
             });
             showMenu();
@@ -382,34 +363,22 @@
             }
         }
 
-        // 🖥️ টিভি রিমোট ও পিসি কীবোর্ড কন্ট্রোল লজিক
+        // 🖥️ টিভি রিমোট ও পিসি কীবোর্ড কন্ট্রোল লজিক (Up/Down/Left/Right/OK)
         document.addEventListener('keydown', function(event) {
             if (!isMenuOpen) {
                 if (event.key === 'Enter' || event.keyCode === 13) { toggleMenu(); }
-                // রিমোটের Up/Down বাটন দিয়ে সরাসরি চ্যানেল চেঞ্জ যখন ওএসডি বন্ধ থাকে
                 if (event.key === 'ArrowUp' || event.keyCode === 38) { playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1); }
                 if (event.key === 'ArrowDown' || event.keyCode === 40) { playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0); }
                 return;
             }
 
-            // মেনু খোলা থাকা অবস্থায় রিমোট কন্ট্রোল গ্রিড নেভিগেশন
             switch(event.key) {
                 case 'ArrowUp': case 38:
-                    event.preventDefault();
-                    if (focusedChannelIndex - 4 >= 0) focusedChannelIndex -= 4; // ৪ কলাম গ্রিড স্টেপ
-                    updateFocusVisual();
-                    break;
-                case 'ArrowDown': case 40:
-                    event.preventDefault();
-                    if (focusedChannelIndex + 4 < channels.length) focusedChannelIndex += 4;
-                    updateFocusVisual();
-                    break;
-                case 'ArrowLeft': case 37:
                     event.preventDefault();
                     if (focusedChannelIndex > 0) focusedChannelIndex--;
                     updateFocusVisual();
                     break;
-                case 'ArrowRight': case 39:
+                case 'ArrowDown': case 40:
                     event.preventDefault();
                     if (focusedChannelIndex < channels.length - 1) focusedChannelIndex++;
                     updateFocusVisual();
@@ -418,17 +387,15 @@
                     event.preventDefault();
                     playChannel(focusedChannelIndex);
                     break;
-                case 'Escape': case 'Back': case 461: case 27: // ব্যাক বাটন সাপোর্ট
+                case 'Escape': case 'Back': case 461: case 27:
                     event.preventDefault();
                     hideMenu();
                     break;
             }
         });
 
-        // 📱 ডাবল ক্লিক/ট্যাপ ফুল স্ক্রিন এবং সাউন্ড স্ক্রোল মেকানিজম
+        // 📱 মাউস ক্লিক এবং ডাবল ক্লিক ফুল স্ক্রিন
         const wrapper = document.getElementById('player-wrapper');
-        
-        // সিঙ্গেলে মেনু ওপেন, ডাবল ক্লিকে ফুল স্ক্রিন
         let clickTimer;
         wrapper.addEventListener('click', function(e) {
             if (e.pointerType === 'touch') return;
@@ -452,14 +419,13 @@
             }
         }
 
-        // টিভিতে অটোমেটিক ফুল স্ক্রিন করার ট্রিগার
         function autoFullscreenTV() {
             document.body.addEventListener('click', () => {
                 if (!document.fullscreenElement) wrapper.requestFullscreen();
             }, { once: true });
         }
 
-        // 🔊 পিসিতে মাউসের চাকা ঘুরিয়ে সাউন্ড কন্ট্রোল (Mouse Wheel Volume)
+        // 🔊 পিসিতে মাউসের চাকা ঘুরিয়ে সাউন্ড কন্ট্রোল
         wrapper.addEventListener('wheel', function(e) {
             e.preventDefault();
             let videoObj = wrapper.querySelector('video');
@@ -487,7 +453,7 @@
             touchendY = e.changedTouches[0].screenY;
             let duration = new Date().getTime() - touchstartTime;
             
-            // মোবাইল ডাবল ট্যাপ ফুল স্ক্রিন চেক
+            // মোবাইল ডাবল ট্যাপ ফুল স্ক্রিন
             if (Math.abs(touchstartX - touchendX) < 10 && Math.abs(touchstartY - touchendY) < 10 && duration < 250) {
                 if (this.tappedTwice) {
                     handleFullscreen();
@@ -500,12 +466,12 @@
                 return;
             }
 
-            // সোয়াইপ লজিক (ডানে-বামে চ্যানেল চেঞ্জ)
+            // সোয়াইপ (ডানে-বামে চ্যানেল চেঞ্জ)
             if (touchstartX - touchendX > 60) playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0);
             if (touchendX - touchstartX > 60) playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1);
         }, { passive: true });
 
-        // স্ক্রিপ্ট রান করার শুরুতে চ্যানেল লিস্ট জেনারেট ও চেক
+        // রান করার শুরুতে এক্সিকিউশন
         validateAndBuildChannels();
     </script>
 </body>
