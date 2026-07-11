@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>মোবাইল ও অ্যান্ড্রয়েড টিভি লাইভ প্লেয়ার</title>
+    <title>ইউনিভার্সাল টিভি রিমোট লাইভ প্লেয়ার</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
@@ -24,16 +24,15 @@
             font-family: Arial, sans-serif;
         }
 
-        /* প্লেয়ার কন্টেইনার - ফুল স্ক্রিন */
+        /* প্লেয়ার ফুল স্ক্রিন */
         #player-wrapper {
             width: 100% !important;
             height: 100% !important;
             position: absolute;
             top: 0;
             left: 0;
-            z-index: 1; /* ভিডিও থাকবে সবার নিচে */
+            z-index: 1;
         }
-
         #player-wrapper video {
             width: 100% !important;
             height: 100% !important;
@@ -44,51 +43,31 @@
             height: 100% !important;
         }
 
-        /* টিভি মাউসের জন্য বিশেষ মেনু বাটন */
-        #menu-toggle-btn {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 5000; /* ভিডিওর উপরে থাকবে */
-            padding: 12px 24px;
-            background: rgba(255, 59, 48, 0.9);
-            color: white;
-            border: 2px solid #fff;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-            transition: background 0.2s;
-        }
-        #menu-toggle-btn:hover {
-            background: #ff3b30;
-        }
-
         /* চ্যানেল মেনু প্যানেল */
         #menu-panel {
             position: absolute;
             top: 0;
-            left: -100%; /* শুরুতে বামে লুকিয়ে থাকবে */
-            width: 300px;
+            left: -100%; /* শুরুতে হাইড থাকবে */
+            width: 320px;
             height: 100%;
-            background: rgba(10, 10, 10, 0.95); /* অন্ধকার ও ঘন করা হয়েছে যেন টিভি স্ক্রিনে ভালো দেখায় */
-            border-right: 1px solid #333;
-            z-index: 9999 !important; /* সবার উপরে থাকবে যেন মাউস ক্লিক পায় */
-            transition: left 0.3s ease;
+            background: rgba(15, 15, 15, 0.95);
+            border-right: 2px solid #ff3b30;
+            z-index: 9999;
+            transition: left 0.25s ease-in-out;
             display: flex;
             flex-direction: column;
         }
         #menu-panel.open {
-            left: 0;
+            left: 0; /* রিমোটে ওকে চাপলে বাম থেকে আসবে */
         }
         .menu-header {
-            padding: 20px;
+            padding: 25px 20px;
             color: #fff;
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #222;
             text-align: center;
+            background: #111;
         }
         .channel-list {
             flex: 1;
@@ -96,43 +75,62 @@
             padding: 15px;
         }
         .channel-item {
-            padding: 15px;
-            color: #ccc;
-            background: rgba(255,255,255,0.05);
+            padding: 16px;
+            color: #aaa;
+            background: rgba(255,255,255,0.03);
             margin-bottom: 10px;
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 18px;
-            border: 1px solid transparent;
+            font-size: 20px; /* টিভির জন্য ফন্ট বড় করা হয়েছে */
+            border: 2px solid transparent;
+            transition: all 0.1s ease;
         }
-        /* মাউস কার্সার আইটেমের ওপর নিলে (Hover) বা রিমোট দিয়ে সিলেক্ট করলে */
-        .channel-item:hover, .channel-item.focused {
+        /* রিমোটের আপ-ডাউন বাটন দিয়ে সিলেক্ট করলে (ফোকাস) */
+        .channel-item.focused {
             background: #ffffff !important;
             color: #000 !important;
-            border: 1px solid #ff3b30;
-        }
-        .channel-item.active {
-            background: #ff3b30;
-            color: #fff;
+            border: 2px solid #ff3b30;
+            transform: scale(1.02);
             font-weight: bold;
+        }
+        /* বর্তমানে যে চ্যানেলটি চলছে */
+        .channel-item.active {
+            background: rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+            border-left: 5px solid #ff3b30;
+        }
+
+        /* রিমোট গাইড পপআপ (টিভি চালু হলে দেখাবে রিমোটের কোন বাটনে কি কাজ) */
+        #remote-guide {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 10px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            z-index: 5000;
+            border: 1px solid #444;
+            pointer-events: none;
         }
 
         /* টোস্ট নোটিফিকেশন */
         #toast {
             position: absolute;
-            bottom: 40px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.85);
+            background: rgba(255, 59, 48, 0.95);
             color: #fff;
-            padding: 12px 25px;
+            padding: 14px 30px;
             border-radius: 30px;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
             z-index: 6000;
             opacity: 0;
-            transition: opacity 0.3s;
+            transition: opacity 0.2s;
             pointer-events: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
         #toast.show {
             opacity: 1;
@@ -141,23 +139,23 @@
 </head>
 <body>
 
-    <!-- টিভি মাউস দিয়ে ক্লিক করার জন্য বাটন -->
-    <button id="menu-toggle-btn">চ্যানেল লিস্ট</button>
+    <!-- রিমোট গাইড প্রম্পট -->
+    <div id="remote-guide">👉 রিমোটের OK চাপলে চ্যানেল লিস্ট আসবে।</div>
 
-    <!-- Clappr প্লেয়ার কন্টেইনার -->
+    <!-- Clappr প্লেয়ার -->
     <div id="player-wrapper"></div>
 
-    <!-- সাইড চ্যানেল মেনু -->
-    <div id="menu-panel">
-        <div class="menu-header">📺 চ্যানেল সমূহ</div>
+    <!-- চ্যানেল মেনু -->
+    <div id="menu-panel" id="menuPanel">
+        <div class="menu-header">📺 চ্যানেল লিস্ট</div>
         <div class="channel-list" id="channelList"></div>
     </div>
 
-    <!-- নোটিফিকেশন টোস্ট -->
+    <!-- টোস্ট নোটিফিকেশন -->
     <div id="toast"></div>
 
     <script>
-        // চ্যানেল লিস্ট
+        // চ্যানেল ডাটা
         const channels = [
             { name: "T Sports HD", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN4/tracks-v1a1/mono.m3u8" },
             { name: "T Sports HD", url: "https://trophystream.com/cors-proxy/https/deviantart.lovetier.bz/TSN3/index.m3u8" },
@@ -238,10 +236,10 @@
         ];
 
         let player;
-        let currentChannelIndex = 0;
+        let currentChannelIndex = 0; // বর্তমানে কোন চ্যানেল চলছে
+        let focusedIndex = 0;        // মেনুর ভেতর রিমোটের লাল ফোকাস কোথায় আছে
         let isMenuOpen = false;
 
-        // প্লেয়ার চালু করা
         function initPlayer(url) {
             player = new Clappr.Player({
                 source: url,
@@ -250,15 +248,11 @@
                 height: "100%",
                 autoPlay: true,
                 mute: false,
-                chromeless: true, // টিভির জন্য ডিফল্ট কন্ট্রোল হাইড রাখা ভালো
-                playback: {
-                    playInline: true,
-                    recycleVideo: true
-                }
+                chromeless: true,
+                playback: { playInline: true, recycleVideo: true }
             });
         }
 
-        // চ্যানেল প্লে করার ফাংশন
         function playChannel(index) {
             if (index < 0 || index >= channels.length) return;
             currentChannelIndex = index;
@@ -270,20 +264,21 @@
                 initPlayer(channel.url);
             }
 
-            // অ্যাক্টিভ ক্লাস আপডেট
+            // অ্যাক্টিভ চ্যানেল মার্ক করা
             document.querySelectorAll('.channel-item').forEach((item, i) => {
                 if (i === index) item.classList.add('active');
                 else item.classList.remove('active');
             });
 
-            showToast(channel.name);
+            showToast("প্লে হচ্ছে: " + channel.name);
             hideMenu();
         }
 
-        // মেনু কন্ট্রোল
         function showMenu() {
             document.getElementById('menu-panel').classList.add('open');
             isMenuOpen = true;
+            focusedIndex = currentChannelIndex; // মেনু খুললে রানিং চ্যানেলের ওপর ফোকাস যাবে
+            updateFocusUI();
         }
         
         function hideMenu() {
@@ -291,47 +286,101 @@
             isMenuOpen = false;
         }
 
-        // টোস্ট মেসেজ
         function showToast(text) {
             const toast = document.getElementById('toast');
             toast.innerText = text;
             toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2000);
+            setTimeout(() => toast.classList.remove('show'), 2500);
         }
 
-        // চ্যানেল লিস্ট তৈরি (মাউস ক্লিকের জন্য 'click' ইভেন্ট ব্যবহার করা হয়েছে)
+        // রিমোট ফোকাস ইন্টারফেস আপডেট ও অটো-স্ক্রলিং লজিক
+        function updateFocusUI() {
+            const items = document.querySelectorAll('.channel-item');
+            items.forEach((item, i) => {
+                if (i === focusedIndex) {
+                    item.classList.add('focused');
+                    // রিমোট দিয়ে নিচে নামলে যেন মেনু অটো স্ক্রল হয়
+                    item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                } else {
+                    item.classList.remove('focused');
+                }
+            });
+        }
+
+        // চ্যানেল লিস্ট রেন্ডার
         const channelListContainer = document.getElementById('channelList');
         channels.forEach((channel, index) => {
             const item = document.createElement('div');
             item.className = 'channel-item';
             item.innerText = channel.name;
-            
-            // মাউস দিয়ে ক্লিক করলে চ্যানেল চলবে
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                playChannel(index);
-            });
-            
             channelListContainer.appendChild(item);
         });
 
-        // লাল বাটনে মাউস দিয়ে ক্লিক করলে মেনু খুলবে/বন্ধ হবে
-        document.getElementById('menu-toggle-btn').addEventListener('click', (e) => {
-            e.stopPropagation();
+        // অটো গাইড ৫ সেকেন্ড পর গায়েব হবে
+        setTimeout(() => {
+            document.getElementById('remote-guide').style.display = 'none';
+        }, 6000);
+
+        // প্রথম চ্যানেল চালু করা
+        playChannel(0);
+
+
+        // ================== ১০০% ইউনিভার্সাল রিমোট কি-বোর্ড লজিক ==================
+        document.addEventListener('keydown', function(e) {
+            // ইউনিভার্সাল রিমোটের বিভিন্ন ব্র্যান্ডের কী-কোড ম্যাপিং
+            const keyCode = e.keyCode || e.which;
+            
+            // কি-কোড লিস্ট (টিভি ও অ্যান্ড্রয়েড স্ট্যান্ডার্ড)
+            const KEY_UP = 38;
+            const KEY_DOWN = 40;
+            const KEY_LEFT = 37;
+            const KEY_RIGHT = 39;
+            const KEY_ENTER = 13;
+            const KEY_BACK = 27;     // ESC / Universal Back
+            const KEY_ANDROID_BACK = 4; // Pure Android Remote Back
+            
+            // রিমোটের যেকোনো বোতাম চাপলে মাউসের ফ্রিজ অবস্থা কেটে কোড কাজ শুরু করবে
+            e.preventDefault(); 
+
             if (isMenuOpen) {
-                hideMenu();
+                // ১. মেনু খোলা থাকা অবস্থায় রিমোটের কাজ:
+                if (keyCode === KEY_UP) { 
+                    // ওপরের বাটন চাপলে
+                    focusedIndex = (focusedIndex > 0) ? focusedIndex - 1 : channels.length - 1;
+                    updateFocusUI();
+                } 
+                else if (keyCode === KEY_DOWN) { 
+                    // নিচের বাটন চাপলে
+                    focusedIndex = (focusedIndex < channels.length - 1) ? focusedIndex + 1 : 0;
+                    updateFocusUI();
+                } 
+                else if (keyCode === KEY_ENTER) { 
+                    // মাঝখানের গোল ওকে (OK) বাটন চাপলে চ্যানেল প্লে হবে
+                    playChannel(focusedIndex);
+                } 
+                else if (keyCode === KEY_LEFT || keyCode === KEY_BACK || keyCode === KEY_ANDROID_BACK) { 
+                    // বামে চাপলে বা ব্যাক বাটন চাপলে মেনু বন্ধ হবে
+                    hideMenu();
+                }
             } else {
-                showMenu();
+                // ২. ফুল স্ক্রিন ভিডিও চলাকালীন রিমোটের কাজ:
+                if (keyCode === KEY_ENTER || keyCode === KEY_UP || keyCode === KEY_DOWN) {
+                    // ভিডিও চলাকালীন OK, Up বা Down চাপলেই চ্যানেল লিস্ট স্ক্রিনে চলে আসবে
+                    showMenu();
+                }
+                else if (keyCode === KEY_RIGHT) {
+                    // ডান পাশের বাটন চাপলে সরাসরি পরের চ্যানেলে চলে যাবে (মেনু খোলা ছাড়াই)
+                    let next = currentChannelIndex + 1;
+                    playChannel(next < channels.length ? next : 0);
+                }
+                else if (keyCode === KEY_LEFT) {
+                    // বাম পাশের বাটন চাপলে সরাসরি আগের চ্যানেলে চলে যাবে
+                    let prev = currentChannelIndex - 1;
+                    playChannel(prev >= 0 ? prev : channels.length - 1);
+                }
             }
         });
-
-        // ভিডিওর খালি জায়গায় মাউস দিয়ে ক্লিক করলে মেনু বন্ধ হয়ে যাবে
-        document.getElementById('player-wrapper').addEventListener('click', () => {
-            if (isMenuOpen) hideMenu();
-        });
-
-        // প্রথম চ্যানেল দিয়ে শুরু
-        playChannel(0);
+        // =========================================================================
     </script>
 </body>
 </html>
