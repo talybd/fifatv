@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maruf IPTV Pro - Left Sidebar</title>
+    <title>Maruf IPTV Pro - Extreme Glass</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
@@ -37,39 +37,39 @@
         #player-wrapper video {
             width: 100% !important;
             height: 100% !important;
-            object-fit: fill !important; /* ফুল স্ক্রিন অটো ফিট */
+            object-fit: fill !important; /* ফোর্স ফুল স্ক্রিন */
         }
         [data-player] {
             width: 100% !important;
             height: 100% !important;
         }
 
-        /* 💎 বাম পাশের প্রিমিয়াম গ্লাস চ্যানেল মেনু প্যানেল */
+        /* 💎 ৫০% স্বচ্ছ কাচের লাক্সারি সাইডবার (ভিডিও ৫০% দেখা যাবে) */
         #menu-panel {
-            position: absolute;
+            position: fixed; /* ফুল স্ক্রিনেও যাতে ওপরে শো করে */
             top: 0;
-            left: -320px; /* শুরুতে বামে লুকিয়ে থাকবে */
+            left: -320px; 
             width: 320px;
             height: 100%;
-            background: rgba(10, 15, 30, 0.75); /* ডার্ক লাক্সারি কাচ */
-            backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.5); /* ৫০% ট্রান্সপারেন্ট ব্যাকগ্রাউন্ড */
+            backdrop-filter: blur(20px);      /* প্রিমিয়াম ব্লার ইফেক্ট */
             -webkit-backdrop-filter: blur(20px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            z-index: 10;
+            border-right: 1px solid rgba(255, 255, 255, 0.15);
+            z-index: 99999 !important; /* ফুল স্ক্রিনের ওপরে জোরপূর্বক রাখার জন্য */
             display: flex;
             flex-direction: column;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            box-shadow: 15px 0 30px rgba(0,0,0,0.3);
             transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
         #menu-panel.open {
-            left: 0; /* স্ক্রিনে আসলে বাম পাশে সেট হবে */
+            left: 0;
         }
         .menu-header {
             padding: 25px 20px;
             color: #fff;
             font-size: 20px;
             font-weight: 700;
-            letter-spacing: 0.5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.4);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
         }
@@ -80,7 +80,6 @@
             margin-top: 4px;
         }
         
-        /* চ্যানেল লিস্টের ভার্টিকাল স্ক্রোল ভিউ */
         .channel-list {
             flex: 1;
             overflow-y: auto;
@@ -90,10 +89,10 @@
             gap: 10px;
         }
         
-        /* 💎 প্রিমিয়াম চ্যানেল আইটেম ডিজাইন */
+        /* চ্যানেল আইটেম গ্লাস লুক */
         .channel-item {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             padding: 14px;
             color: #e2e8f0;
             border-radius: 12px;
@@ -104,8 +103,8 @@
             transition: all 0.2s ease;
         }
         .channel-item .ch-num {
-            background: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
+            background: rgba(255, 255, 255, 0.15);
+            color: #cbd5e1;
             font-size: 11px;
             font-weight: bold;
             padding: 3px 7px;
@@ -121,69 +120,60 @@
             text-overflow: ellipsis;
         }
         
-        /* পিসি হোভার এবং টিভি রিমোট ফোকাস ইফেক্ট */
         .channel-item:hover, .channel-item.focused {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
             border-color: #3b82f6;
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.3);
-            transform: translateX(4px); /* আলতো ডানদিকে সরবে */
+            transform: translateX(4px);
             color: #fff;
         }
         
-        /* অ্যাক্টিভ বা রানিং চ্যানেল */
         .channel-item.active {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.7), rgba(29, 78, 216, 0.7));
             border-color: #60a5fa;
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
             color: #fff;
             font-weight: bold;
         }
-        .channel-item.active .ch-num {
-            background: rgba(255, 255, 255, 0.25);
-            color: #fff;
-        }
 
-        /* ইন্ডিকেটর ও নোটিফিকেশন ওএসডি */
+        /* ওএসডি নোটিফিকেশন */
         #osd-alert {
-            position: absolute;
+            position: fixed;
             top: 30px;
             right: 30px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.15);
             color: #fff;
             padding: 10px 20px;
             border-radius: 10px;
             font-size: 14px;
             font-weight: bold;
-            z-index: 20;
+            z-index: 999999 !important;
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
         }
         #osd-alert.show { opacity: 1; }
 
-        /* কাস্টম স্ক্রোলবার */
         .channel-list::-webkit-scrollbar { width: 4px; }
-        .channel-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 10px; }
+        .channel-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- লাইভ ভিডিও প্লেয়ার -->
     <div id="player-wrapper"></div>
 
-    <!-- বাম পাশের লাক্সারি সাইডবার মেনু -->
-    <div id="menu-panel" id="menuPanel">
-        <div class="menu-header">📺 MARUF IPTV <span>PREMIUM LIVE TV</span></div>
+    <!-- বাম পাশের সাইডবার (৫০% অপাসিটি) -->
+    <div id="menu-panel">
+        <div class="menu-header">📺 MARUF IPTV <span>PREMIUM GLASS INTERFACE</span></div>
         <div class="channel-list" id="channelList"></div>
     </div>
 
-    <!-- ভলিউম/চ্যানেল ওএসডি অ্যালার্ট -->
     <div id="osd-alert">🔊 ভলিউম: ১০০%</div>
 
     <script>
-        // আপনার প্লেলিস্টের সকল লাইভ চ্যানেল (ইন-অ্যাক্টিভ বা ডেড ইউআরএল স্বয়ংক্রিয়ভাবে ফিল্টার হবে)
+        // চ্যানেল লিস্ট
         const allChannels = [
             { name: "PTV", url: "https://raw.githubusercontent.com/IPTVFlixBD/OopsTv/refs/heads/main/sps1/809398.m3u8" },
             { name: "T Sports HD", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8" },
@@ -262,29 +252,24 @@
             { name: "ICC_9XM", url: "https://wiselp.wiseplayout.com/9XM/HD1080/HD1080.m3u8" }
         ];
 
-        let channels = []; // শুধুমাত্র অ্যাক্টিভ চ্যানেল ফিল্টার হবে
+        let channels = []; 
         let player;
         let currentChannelIndex = 0;
         let focusedChannelIndex = 0;
         let isMenuOpen = true;
+        let skipTimeout;
 
-        // 🛡️ ইন-অ্যাক্টিভ ও ডেড লিংক ফিল্টারিং লজিক
         function validateAndBuildChannels() {
             let validCount = 1;
             allChannels.forEach((ch) => {
                 if(ch.url && !ch.url.includes("cors-proxy") && !ch.name.includes("Unknown")) {
-                    channels.push({
-                        id: validCount - 1,
-                        name: ch.name,
-                        url: ch.url
-                    });
+                    channels.push({ id: validCount - 1, name: ch.name, url: ch.url });
                     validCount++;
                 }
             });
             renderChannels();
         }
 
-        // সাইডবারে চ্যানেল লিস্ট তৈরি
         function renderChannels() {
             const listContainer = document.getElementById('channelList');
             listContainer.innerHTML = "";
@@ -299,11 +284,9 @@
                 card.innerHTML = `<span class="ch-num">${index + 1}</span><span class="ch-name">${channel.name}</span>`;
                 listContainer.appendChild(card);
             });
-            
             if(channels.length > 0) initPlayer(channels[0].url);
         }
 
-        // প্লেয়ার ইনিশিয়ালাইজেশন
         function initPlayer(url) {
             player = new Clappr.Player({
                 source: url,
@@ -312,7 +295,13 @@
                 height: "100%",
                 autoPlay: true,
                 chromeless: true,
-                playback: { playInline: true, recycleVideo: true }
+                playback: { playInline: true, recycleVideo: true },
+                events: {
+                    onPlay: () => clearSkipTimer(),
+                    onStop: () => clearSkipTimer(),
+                    onError: () => autoSkipChannel(), // প্লেয়ার এরর দিলে অটো স্কিপ
+                    onBuffer: () => startSkipTimer()   // বাফারিং বেশিক্ষণ চললে স্কিপ ট্র্যাকিং
+                }
             });
             showMenu();
             autoFullscreenTV();
@@ -322,6 +311,7 @@
             if (index < 0 || index >= channels.length) return;
             currentChannelIndex = index;
             focusedChannelIndex = index;
+            clearSkipTimer();
             
             player.configure({ source: channels[index].url });
             player.play();
@@ -333,9 +323,34 @@
 
             showOSD("📺 প্লে হচ্ছে: " + channels[index].name);
             hideMenu();
+            
+            // ৫ সেকেন্ডের মধ্যে চ্যানেল সচল না হলে অটো স্কিপ ট্রিগার করবে
+            startSkipTimer();
         }
 
-        // ওএসডি কন্ট্রোল
+        // ⏱️ অটো স্কিপ লজিক (৫ সেকেন্ড কোনো ডাটা না পেলে পরবর্তী চ্যানেলে চলে যাবে)
+        function startSkipTimer() {
+            clearSkipTimer();
+            skipTimeout = setTimeout(() => {
+                autoSkipChannel();
+            }, 5000); 
+        }
+
+        function clearSkipTimer() {
+            if (skipTimeout) clearTimeout(skipTimeout);
+        }
+
+        function autoSkipChannel() {
+            clearSkipTimer();
+            let nextIndex = currentChannelIndex + 1;
+            if (nextIndex >= channels.length) nextIndex = 0;
+            showOSD("⚠️ চ্যানেল অফলাইন! স্কিপ হচ্ছে...");
+            setTimeout(() => {
+                playChannel(nextIndex);
+            }, 1000);
+        }
+
+        // ওএসডি ও মেনু ওপেন/ক্লোজ
         function showMenu() {
             document.getElementById('menu-panel').classList.add('open');
             isMenuOpen = true;
@@ -351,7 +366,7 @@
             const osd = document.getElementById('osd-alert');
             osd.innerText = text;
             osd.classList.add('show');
-            setTimeout(() => osd.classList.remove('show'), 2000);
+            setTimeout(() => osd.classList.remove('show'), 2500);
         }
 
         function updateFocusVisual() {
@@ -363,7 +378,7 @@
             }
         }
 
-        // 🖥️ টিভি রিমোট ও পিসি কীবোর্ড কন্ট্রোল লজিক (Up/Down/Left/Right/OK)
+        // টিভি রিমোট ও কীবোর্ড নেভিগেশন (Up/Down/Enter/Back)
         document.addEventListener('keydown', function(event) {
             if (!isMenuOpen) {
                 if (event.key === 'Enter' || event.keyCode === 13) { toggleMenu(); }
@@ -394,7 +409,7 @@
             }
         });
 
-        // 📱 মাউস ক্লিক এবং ডাবল ক্লিক ফুল স্ক্রিন
+        // ডাবল ক্লিক ফুল স্ক্রিন ও সিঙ্গেল ক্লিকে মেনু টগল
         const wrapper = document.getElementById('player-wrapper');
         let clickTimer;
         wrapper.addEventListener('click', function(e) {
@@ -425,23 +440,19 @@
             }, { once: true });
         }
 
-        // 🔊 পিসিতে মাউসের চাকা ঘুরিয়ে সাউন্ড কন্ট্রোল
+        // মাউস হুইল ভলিউম কন্ট্রোল
         wrapper.addEventListener('wheel', function(e) {
             e.preventDefault();
             let videoObj = wrapper.querySelector('video');
             if (videoObj) {
-                if (e.deltaY < 0) {
-                    videoObj.volume = Math.min(1, videoObj.volume + 0.05);
-                } else {
-                    videoObj.volume = Math.max(0, videoObj.volume - 0.05);
-                }
+                if (e.deltaY < 0) { videoObj.volume = Math.min(1, videoObj.volume + 0.05); } 
+                else { videoObj.volume = Math.max(0, videoObj.volume - 0.05); }
                 showOSD("🔊 ভলিউম: " + Math.round(videoObj.volume * 100) + "%");
             }
         }, { passive: false });
 
-        // 📱 মোবাইলে টাচ ও সোয়াইপ জেসচার
+        // মোবাইল টাচ ও সোয়াইপ/ডাবল ট্যাপ
         let touchstartX = 0, touchstartY = 0, touchendX = 0, touchendY = 0, touchstartTime = 0;
-        
         wrapper.addEventListener('touchstart', e => {
             touchstartX = e.changedTouches[0].screenX;
             touchstartY = e.changedTouches[0].screenY;
@@ -453,7 +464,6 @@
             touchendY = e.changedTouches[0].screenY;
             let duration = new Date().getTime() - touchstartTime;
             
-            // মোবাইল ডাবল ট্যাপ ফুল স্ক্রিন
             if (Math.abs(touchstartX - touchendX) < 10 && Math.abs(touchstartY - touchendY) < 10 && duration < 250) {
                 if (this.tappedTwice) {
                     handleFullscreen();
@@ -466,12 +476,10 @@
                 return;
             }
 
-            // সোয়াইপ (ডানে-বামে চ্যানেল চেঞ্জ)
             if (touchstartX - touchendX > 60) playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0);
             if (touchendX - touchstartX > 60) playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1);
         }, { passive: true });
 
-        // রান করার শুরুতে এক্সিকিউশন
         validateAndBuildChannels();
     </script>
 </body>
