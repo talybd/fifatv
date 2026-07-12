@@ -2,194 +2,499 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Maruf IPTV Pro</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appolo TV - Live IPTV</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
     
+    <!-- Font Awesome Icons for design -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, sans-serif;
             user-select: none;
-            -webkit-user-select: none;
         }
-        body, html {
-            width: 100%;
-            height: 100%;
-            background-color: #000;
+
+        body {
+            background-color: #0b0f19;
+            color: #fff;
+            height: 100vh;
             overflow: hidden;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
-
-        /* প্লেয়ার কন্টেইনার - আল্ট্রা ফিট */
-        #player-wrapper {
-            width: 100% !important;
-            height: 100% !important;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            cursor: pointer;
-        }
-        #player-wrapper video {
-            width: 100% !important;
-            height: 100% !important;
-            object-fit: fill !important; /* সব স্ক্রিন জুড়ে অটো ফিট */
-        }
-        [data-player] {
-            width: 100% !important;
-            height: 100% !important;
-        }
-
-        /* 💎 আল্ট্রা প্রফেশনাল কাচের মতো চ্যানেল মেনু (সেন্টার থিয়েটার ওএসডি) */
-        #menu-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 15, 30, 0.7); /* ডার্ক লাক্সারি ওভারলে */
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            z-index: 10;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+        }
+
+        /* --- 1. TOP HEADER NAVIGATION --- */
+        header {
+            background-color: #060913;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
             align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            transform: scale(1.05);
+            border-bottom: 1px solid #1e293b;
         }
-        #menu-panel.open {
-            opacity: 1;
-            pointer-events: auto;
-            transform: scale(1);
-        }
-        .menu-header {
-            color: #fff;
-            font-size: 26px;
-            font-weight: 700;
-            letter-spacing: 1px;
-            margin-bottom: 25px;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+
+        .logo-area {
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .menu-header span {
-            color: #3b82f6;
+
+        .logo-box {
+            background: #fff;
+            color: #0052cc;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 20px;
         }
-        
-        /* গ্রিড লেআউট - সব ডিভাইসে রেসপনসিভ দেখাবে */
-        .channel-list {
-            width: 90%;
-            max-width: 1100px;
-            height: 65%;
-            overflow-y: auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 15px;
-            padding: 20px;
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 0.5px;
         }
-        
-        /* 💎 প্রিমিয়াম চ্যানেল কার্ড ডিজাইন */
-        .channel-item {
-            background: rgba(255, 255, 255, 0.06);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 16px;
-            color: #e2e8f0;
-            border-radius: 14px;
+        .brand-name span {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: 5px;
+        }
+
+        .category-tabs {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tab {
+            background: #1e293b;
+            color: #cbd5e1;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 13px;
             cursor: pointer;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .tab.active, .tab:hover {
+            background: #ff2a4b;
+            color: #fff;
+        }
+
+        /* --- 2. MARQUEE & NOTIFICATION BAR --- */
+        .notice-bar {
+            background: #090d16;
+            padding: 8px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            font-size: 13px;
+            border-bottom: 1px solid #151f32;
+        }
+
+        .social-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-telegram {
+            background: #0088cc;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .btn-download-top {
+            background: #0284c7;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .ticker-text {
+            color: #94a3b8;
+            flex: 1;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        /* --- 3. MAIN CONTENT LAYOUT --- */
+        .main-container {
+            display: flex;
+            flex: 1;
+            padding: 15px;
+            gap: 15px;
+            height: calc(100vh - 110px);
+        }
+
+        /* Left Side: Player Container */
+        .player-section {
+            flex: 2.5;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .video-box {
+            width: 100%;
+            height: 82%;
+            background: #000;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid #1e293b;
+        }
+
+        #player-wrapper {
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        /* Current Playing Info Bar underneath player */
+        .player-footer {
+            background: #111827;
+            padding: 12px;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #1e293b;
+        }
+
+        .current-ch-info {
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .channel-item .ch-num {
-            background: rgba(255, 255, 255, 0.1);
-            color: #94a3b8;
-            font-size: 12px;
-            font-weight: bold;
-            padding: 4px 8px;
+
+        .current-ch-logo {
+            width: 45px;
+            height: 45px;
+            background: #fff;
             border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
         }
-        .channel-item .ch-name {
-            font-size: 15px;
-            font-weight: 500;
+        .current-ch-logo img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .current-ch-details .live-tag {
+            background: #ff2a4b;
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        .current-ch-details .cat-name {
+            font-size: 11px;
+            color: #64748b;
+            margin-left: 5px;
+        }
+        .current-ch-details h3 {
+            font-size: 16px;
+            margin-top: 3px;
+            color: #fff;
+        }
+
+        .btn-stretch {
+            background: #1e293b;
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 6px 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-stretch:hover {
+            color: #fff;
+            border-color: #475569;
+        }
+
+        /* Right Side: Channel List Sidebar */
+        .sidebar-section {
+            flex: 1;
+            background: #111622;
+            border-radius: 8px;
+            border: 1px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 10px;
+        }
+
+        /* Download Banner in Sidebar */
+        .app-download-banner {
+            background: linear-gradient(135deg, #022c22, #064e3b);
+            border: 1px solid #059669;
+            padding: 10px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+        .download-icon {
+            background: #10b981;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        .download-text h4 {
+            font-size: 12px;
+            color: #fff;
+        }
+        .download-text p {
+            font-size: 10px;
+            color: #a7f3d0;
+        }
+
+        /* Channel Search */
+        .search-container {
+            position: relative;
+        }
+        .search-container i {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #475569;
+            font-size: 14px;
+        }
+        .search-box {
+            width: 100%;
+            background: #090d16;
+            border: 1px solid #1e293b;
+            padding: 8px 8px 8px 32px;
+            border-radius: 6px;
+            color: white;
+            font-size: 13px;
+            outline: none;
+        }
+        .search-box::placeholder {
+            color: #475569;
+        }
+
+        /* Grid Channel List Wrapper */
+        .grid-channels {
+            flex: 1;
+            overflow-y: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            padding-right: 2px;
+        }
+
+        /* Channel Item Card */
+        .channel-card {
+            background: #1c2333;
+            border: 1px solid #2e3a54;
+            border-radius: 8px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.2s ease;
+            min-height: 95px;
+        }
+
+        .channel-card .live-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: #ff2a4b;
+            color: white;
+            font-size: 8px;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .channel-thumb {
+            width: 45px;
+            height: 45px;
+            background: white;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px;
+            margin-bottom: 6px;
+        }
+
+        .channel-thumb img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .channel-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: #cbd5e1;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-        
-        /* পিসি হোভার এবং টিভি রিমোট ফোকাস ইফেক্ট */
-        .channel-item:hover, .channel-item.focused {
-            background: rgba(255, 255, 255, 0.18);
-            border-color: #3b82f6;
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-            transform: translateY(-3px);
-            color: #fff;
-        }
-        
-        /* অ্যাক্টিভ বা রানিং চ্যানেল */
-        .channel-item.active {
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            border-color: #60a5fa;
-            box-shadow: 0 4px 25px rgba(37, 99, 235, 0.5);
-            color: #fff;
-            font-weight: bold;
-        }
-        .channel-item.active .ch-num {
-            background: rgba(255, 255, 255, 0.25);
-            color: #fff;
+            width: 100%;
         }
 
-        /* ইন্ডিকেটর ও নোটিফিকেশন ওএসডি */
-        #osd-alert {
-            position: absolute;
-            top: 30px;
-            right: 30px;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: #fff;
-            padding: 10px 20px;
+        /* Hover & Active System */
+        .channel-card:hover {
+            border-color: #0284c7;
+            background: #242f46;
+            transform: translateY(-2px);
+        }
+
+        .channel-card.active {
+            border: 2px solid #00dc82;
+            background: #142c26;
+        }
+        .channel-card.active .channel-title {
+            color: #00dc82;
+        }
+
+        /* Custom Scrollbar for channel sidebar */
+        .grid-channels::-webkit-scrollbar {
+            width: 5px;
+        }
+        .grid-channels::-webkit-scrollbar-track {
+            background: #090d16;
+        }
+        .grid-channels::-webkit-scrollbar-thumb {
+            background: #334155;
             border-radius: 10px;
-            font-size: 14px;
-            font-weight: bold;
-            z-index: 20;
-            opacity: 0;
-            transition: opacity 0.3s;
-            pointer-events: none;
         }
-        #osd-alert.show { opacity: 1; }
 
-        /* কাস্টম স্ক্রোলবার */
-        .channel-list::-webkit-scrollbar { width: 6px; }
-        .channel-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 10px; }
+        /* Responsive Breakpoint for Mobile Devices */
+        @media (max-width: 900px) {
+            .main-container {
+                flex-direction: column;
+                height: auto;
+                overflow-y: auto;
+            }
+            body { overflow-y: auto; }
+            .player-section { flex: none; height: 350px; }
+            .sidebar-section { flex: none; height: 500px; }
+            header { flex-direction: column; gap: 10px; }
+        }
     </style>
 </head>
 <body>
 
-    <!-- লাইভ ভিডিও প্লেয়ার -->
-    <div id="player-wrapper"></div>
+    <!-- 1. TOP HEADER NAVIGATION -->
+    <header>
+        <div class="logo-area">
+            <div class="logo-box">Appolo</div>
+            <div class="brand-name">APPOLO TV <span>KSBNET</span></div>
+        </div>
+        <div class="category-tabs">
+            <div class="tab active">All</div>
+            <div class="tab">Sports</div>
+            <div class="tab">Bangla</div>
+            <div class="tab">Hindi</div>
+            <div class="tab">English</div>
+            <div class="tab">Islamic</div>
+            <div class="tab">Kids</div>
+        </div>
+    </header>
 
-    <!-- লাক্সারি থিয়েটার মেনু -->
-    <div id="menu-panel" id="menuPanel">
-        <div class="menu-header">📺 MARUF <span>IPTV PREMIUM</span></div>
-        <div class="channel-list" id="channelList"></div>
+    <!-- 2. MARQUEE & NOTIFICATION BAR -->
+    <div class="notice-bar">
+        <div class="social-buttons">
+            <a href="#" class="btn-telegram"><i class="fab fa-telegram-plane"></i> Join AppoloTV Telegram Channel</a>
+            <a href="#" class="btn-telegram"><i class="fab fa-telegram-plane"></i> Join AppoloTV Telegram Group</a>
+        </div>
+        <a href="#" class="btn-download-top"><i class="fas fa-download"></i> এখানে ক্লিক করে অ্যাপ ডাউনলোড করুন !!!</a>
+        <div class="ticker-text">
+            <marquee behavior="scroll" direction="left">বিজ্ঞাপন: #KSBNET কানেকশন দিচ্ছে Optical Fiber Cable এর মাধ্যমে আপনার এলাকায়...</marquee>
+        </div>
     </div>
 
-    <!-- ভলিউম/চ্যানেল ওএসডি অ্যালার্ট -->
-    <div id="osd-alert">🔊 ভলিউম: ১০০%</div>
+    <!-- 3. MAIN CONTENT LAYER -->
+    <div class="main-container">
+        
+        <!-- Left Section: Video Stream -->
+        <div class="player-section">
+            <div class="video-box">
+                <!-- Clappr Video Content Mount Point -->
+                <div id="player-wrapper"></div>
+            </div>
+            
+            <!-- Lower Playing Bar Indicator -->
+            <div class="player-footer">
+                <div class="current-ch-info">
+                    <div class="current-ch-logo" id="currentLogo">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/22/Bangladesh_Television_logo.svg" alt="Ch Logo">
+                    </div>
+                    <div class="current-ch-details">
+                        <div><span class="live-tag">● LIVE</span><span class="cat-name">/ BANGLA</span></div>
+                        <h3 id="currentTitle">BTV HD</h3>
+                    </div>
+                </div>
+                <button class="btn-stretch" onclick="toggleStretch()"><i class="fas fa-expand-arrows-alt"></i> STRETCH</button>
+            </div>
+        </div>
+
+        <!-- Right Section: Interactive Sidebar -->
+        <div class="sidebar-section">
+            <!-- Sidebar Download Action Box -->
+            <div class="app-download-banner">
+                <div class="download-icon"><i class="fas fa-cloud-download-alt"></i></div>
+                <div class="download-text">
+                    <h4>এখানে ক্লিক করে অ্যাপ ডাউনলোড করুন!!!</h4>
+                    <p>v6.0.0 - একই অ্যাপ Android Mobile & Android TV এর জন্য।</p>
+                </div>
+            </div>
+
+            <!-- Search Field -->
+            <div class="search-container">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-box" id="searchChannel" placeholder="Search channel..." onkeyup="filterChannels()">
+            </div>
+
+            <!-- Channel List Grid -->
+            <div class="grid-channels" id="channelGrid">
+                <!-- JavaScript automatically populates elements here -->
+            </div>
+        </div>
+
+    </div>
 
     <script>
-        // আপনার প্লেলিস্টের সকল লাইভ চ্যানেল (ইন-অ্যাক্টিভ বা ডেড ইউআরএল স্বয়ংক্রিয়ভাবে ফিল্টার হবে)
-        const allChannels = [
-           { name: "Drama 24", url: "https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8" },
+        // আপনার দেওয়া আসল প্লেলিস্টের ওপর ভিত্তি করে সাজানো কন্টেন্ট ডাটাবেজ
+        const liveChannels = [
+            { name: "Drama 24", url: "https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8" },
   { name: "BTV National", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8" },
   { name: "Channel 1", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
   { name: "Jamuna TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
@@ -558,234 +863,106 @@
   { name: "Bharat24", url: "https://cdn.ottlive.co.in/bharat24/index.fmp4.m3u8" },
   { name: "Cnews Bharat", url: "https://legitpro.co.in/cnews/cnews/index.fmp4.m3u8" }
             ];
-        let channels = []; // শুধুমাত্র অ্যাক্টিভ চ্যানেলগুলো এখানে ফিল্টার হয়ে জমা হবে
-        let player;
-        let currentChannelIndex = 0;
-        let focusedChannelIndex = 0;
-        let isMenuOpen = true;
-
-        // 🛡️ ফিল্টারিং লজিক: ইন-অ্যাক্টিভ ও ডেড লিংক বাদ দেওয়া
-        function validateAndBuildChannels() {
-            let validCount = 1;
-            allChannels.forEach((ch) => {
-                // যে লিংকগুলো ফাঁকা, কর্স প্রক্সি ছাড়া ডেড বা ভুল ফরম্যাট সেগুলোকে ফিল্টার করা হচ্ছে
-                if(ch.url && !ch.url.includes("cors-proxy") && !ch.name.includes("Unknown")) {
-                    channels.push({
-                        id: validCount - 1,
-                        name: ch.name,
-                        url: ch.url
-                    });
-                    validCount++;
-                }
-            });
-            renderChannels();
-        }
-
-        // এইচটিএমএল-এ প্রফেশনাল গ্রিড লিস্ট তৈরি
-        function renderChannels() {
-            const listContainer = document.getElementById('channelList');
-            listContainer.innerHTML = "";
-            channels.forEach((channel, index) => {
-                const card = document.createElement('div');
-                card.className = `channel-item ${index === 0 ? 'focused active' : ''}`;
-                card.id = `ch-${index}`;
-                card.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    playChannel(index);
-                });
-                card.innerHTML = `<span class="ch-num">${index + 1}</span><span class="ch-name">${channel.name}</span>`;
-                listContainer.appendChild(card);
-            });
             
-            // প্রথম অ্যাক্টিভ চ্যানেল প্লে করা
-            if(channels.length > 0) initPlayer(channels[0].url);
+        ];
+
+        let player;
+        let isStretched = false;
+
+        // লোড হওয়ার সাথে সাথে গ্রিড চ্যানেল তৈরি করবে
+        function initApp() {
+            const grid = document.getElementById('channelGrid');
+            grid.innerHTML = '';
+
+            liveChannels.forEach((channel, idx) => {
+                const card = document.createElement('div');
+                card.className = `channel-card ${idx === 0 ? 'active' : ''}`;
+                card.setAttribute('onclick', `switchChannel(${idx})`);
+                
+                let liveBadge = channel.live ? `<span class="live-badge">LIVE</span>` : '';
+                
+                card.innerHTML = `
+                    ${liveBadge}
+                    <div class="channel-thumb">
+                        <img src="${channel.logo}" alt="${channel.name}">
+                    </div>
+                    <div class="channel-title">${channel.name}</div>
+                `;
+                grid.appendChild(card);
+            });
+
+            // প্রথম চ্যানেল দিয়ে প্লেয়ার চালু
+            setupPlayer(liveChannels[0].url);
         }
 
-        // প্লেয়ার ইনিশিয়ালাইজেশন
-        function initPlayer(url) {
+        // Clappr প্লেয়ার সেটআপ 
+        function setupPlayer(streamUrl) {
+            if (player) {
+                player.destroy();
+            }
             player = new Clappr.Player({
-                source: url,
+                source: streamUrl,
                 parentId: "#player-wrapper",
                 width: "100%",
                 height: "100%",
                 autoPlay: true,
-                chromeless: true, // ফুল ক্লিয়ার স্ক্রিন
-                playback: { playInline: true, recycleVideo: true }
+                playback: {
+                    playInline: true,
+                    recycleVideo: true
+                }
             });
-            showMenu();
-            autoFullscreenTV();
         }
 
-        function playChannel(index) {
-            if (index < 0 || index >= channels.length) return;
-            currentChannelIndex = index;
-            focusedChannelIndex = index;
+        // ক্লিক করলে নতুন চ্যানেল প্লে হবে এবং ডিটেইলস আপডেট হবে
+        function switchChannel(index) {
+            const targetChannel = liveChannels[index];
             
-            player.configure({ source: channels[index].url });
-            player.play();
+            // প্লেয়ার সোর্স পরিবর্তন
+            setupPlayer(targetChannel.url);
 
-            document.querySelectorAll('.channel-item').forEach((item, i) => {
-                item.classList.remove('active');
-                if (i === index) item.classList.add('active');
+            // UI ইনফো আপডেট
+            document.getElementById('currentTitle').innerText = targetChannel.name;
+            document.getElementById('currentLogo').innerHTML = `<img src="${targetChannel.logo}" alt="logo">`;
+
+            // একটিভ ক্লাস আপডেট
+            const cards = document.querySelectorAll('.channel-card');
+            cards.forEach((card, idx) => {
+                if(idx === index) card.classList.add('active');
+                else card.classList.remove('active');
             });
-
-            showOSD("📺 প্লে হচ্ছে: " + channels[index].name);
-            hideMenu();
         }
 
-        // ওএসডি কন্ট্রোল
-        function showMenu() {
-            document.getElementById('menu-panel').classList.add('open');
-            isMenuOpen = true;
-            updateFocusVisual();
-        }
-        function hideMenu() {
-            document.getElementById('menu-panel').classList.remove('open');
-            isMenuOpen = false;
-        }
-        function toggleMenu() { if (isMenuOpen) hideMenu(); else showMenu(); }
-
-        function showOSD(text) {
-            const osd = document.getElementById('osd-alert');
-            osd.innerText = text;
-            osd.classList.add('show');
-            setTimeout(() => osd.classList.remove('show'), 2000);
-        }
-
-        function updateFocusVisual() {
-            document.querySelectorAll('.channel-item').forEach(btn => btn.classList.remove('focused'));
-            const focusedElement = document.getElementById(`ch-${focusedChannelIndex}`);
-            if (focusedElement) {
-                focusedElement.classList.add('focused');
-                focusedElement.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-            }
-        }
-
-        // 🖥️ টিভি রিমোট ও পিসি কীবোর্ড কন্ট্রোল লজিক
-        document.addEventListener('keydown', function(event) {
-            if (!isMenuOpen) {
-                if (event.key === 'Enter' || event.keyCode === 13) { toggleMenu(); }
-                // রিমোটের Up/Down বাটন দিয়ে সরাসরি চ্যানেল চেঞ্জ যখন ওএসডি বন্ধ থাকে
-                if (event.key === 'ArrowUp' || event.keyCode === 38) { playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1); }
-                if (event.key === 'ArrowDown' || event.keyCode === 40) { playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0); }
-                return;
-            }
-
-            // মেনু খোলা থাকা অবস্থায় রিমোট কন্ট্রোল গ্রিড নেভিগেশন
-            switch(event.key) {
-                case 'ArrowUp': case 38:
-                    event.preventDefault();
-                    if (focusedChannelIndex - 4 >= 0) focusedChannelIndex -= 4; // ৪ কলাম গ্রিড স্টেপ
-                    updateFocusVisual();
-                    break;
-                case 'ArrowDown': case 40:
-                    event.preventDefault();
-                    if (focusedChannelIndex + 4 < channels.length) focusedChannelIndex += 4;
-                    updateFocusVisual();
-                    break;
-                case 'ArrowLeft': case 37:
-                    event.preventDefault();
-                    if (focusedChannelIndex > 0) focusedChannelIndex--;
-                    updateFocusVisual();
-                    break;
-                case 'ArrowRight': case 39:
-                    event.preventDefault();
-                    if (focusedChannelIndex < channels.length - 1) focusedChannelIndex++;
-                    updateFocusVisual();
-                    break;
-                case 'Enter': case 13:
-                    event.preventDefault();
-                    playChannel(focusedChannelIndex);
-                    break;
-                case 'Escape': case 'Back': case 461: case 27: // ব্যাক বাটন সাপোর্ট
-                    event.preventDefault();
-                    hideMenu();
-                    break;
-            }
-        });
-
-        // 📱 ডাবল ক্লিক/ট্যাপ ফুল স্ক্রিন এবং সাউন্ড স্ক্রোল মেকানিজম
-        const wrapper = document.getElementById('player-wrapper');
-        
-        // সিঙ্গেলে মেনু ওপেন, ডাবল ক্লিকে ফুল স্ক্রিন
-        let clickTimer;
-        wrapper.addEventListener('click', function(e) {
-            if (e.pointerType === 'touch') return;
-            if (!clickTimer) {
-                clickTimer = setTimeout(function() {
-                    clickTimer = null;
-                    toggleMenu();
-                }, 250);
-            } else {
-                clearTimeout(clickTimer);
-                clickTimer = null;
-                handleFullscreen();
-            }
-        });
-
-        function handleFullscreen() {
-            if (!document.fullscreenElement) {
-                wrapper.requestFullscreen().catch(err => console.log(err));
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
-        // টিভিতে অটোমেটিক ফুল স্ক্রিন করার ট্রিগার
-        function autoFullscreenTV() {
-            document.body.addEventListener('click', () => {
-                if (!document.fullscreenElement) wrapper.requestFullscreen();
-            }, { once: true });
-        }
-
-        // 🔊 পিসিতে মাউসের চাকা ঘুরিয়ে সাউন্ড কন্ট্রোল (Mouse Wheel Volume)
-        wrapper.addEventListener('wheel', function(e) {
-            e.preventDefault();
-            let videoObj = wrapper.querySelector('video');
-            if (videoObj) {
-                if (e.deltaY < 0) {
-                    videoObj.volume = Math.min(1, videoObj.volume + 0.05);
+        // সার্চ ফাংশন
+        function filterChannels() {
+            const query = document.getElementById('searchChannel').value.toLowerCase();
+            const cards = document.querySelectorAll('.channel-card');
+            
+            cards.forEach((card, index) => {
+                const channelName = liveChannels[index].name.toLowerCase();
+                if(channelName.includes(query)) {
+                    card.style.display = 'flex';
                 } else {
-                    videoObj.volume = Math.max(0, videoObj.volume - 0.05);
+                    card.style.display = 'none';
                 }
-                showOSD("🔊 ভলিউম: " + Math.round(videoObj.volume * 100) + "%");
-            }
-        }, { passive: false });
+            });
+        }
 
-        // 📱 মোবাইলে টাচ ও সোয়াইপ জেসচার
-        let touchstartX = 0, touchstartY = 0, touchendX = 0, touchendY = 0, touchstartTime = 0;
-        
-        wrapper.addEventListener('touchstart', e => {
-            touchstartX = e.changedTouches[0].screenX;
-            touchstartY = e.changedTouches[0].screenY;
-            touchstartTime = new Date().getTime();
-        }, { passive: true });
-
-        wrapper.addEventListener('touchend', e => {
-            touchendX = e.changedTouches[0].screenX;
-            touchendY = e.changedTouches[0].screenY;
-            let duration = new Date().getTime() - touchstartTime;
-            
-            // মোবাইল ডাবল ট্যাপ ফুল স্ক্রিন চেক
-            if (Math.abs(touchstartX - touchendX) < 10 && Math.abs(touchstartY - touchendY) < 10 && duration < 250) {
-                if (this.tappedTwice) {
-                    handleFullscreen();
-                    this.tappedTwice = false;
-                    return;
+        // স্ট্রেচ বাটন ফিট টগল লজিক
+        function toggleStretch() {
+            const videoElement = document.querySelector('#player-wrapper video');
+            if (videoElement) {
+                if (!isStretched) {
+                    videoElement.style.objectFit = 'fill';
+                    isStretched = true;
+                } else {
+                    videoElement.style.objectFit = 'contain';
+                    isStretched = false;
                 }
-                this.tappedTwice = true;
-                setTimeout(() => this.tappedTwice = false, 300);
-                toggleMenu();
-                return;
             }
+        }
 
-            // সোয়াইপ লজিক (ডানে-বামে চ্যানেল চেঞ্জ)
-            if (touchstartX - touchendX > 60) playChannel(currentChannelIndex + 1 < channels.length ? currentChannelIndex + 1 : 0);
-            if (touchendX - touchstartX > 60) playChannel(currentChannelIndex - 1 >= 0 ? currentChannelIndex - 1 : channels.length - 1);
-        }, { passive: true });
-
-        // স্ক্রিপ্ট রান করার শুরুতে চ্যানেল লিস্ট জেনারেট ও চেক
-        validateAndBuildChannels();
+        // উইন্ডো লোড হলে রান হবে
+        window.onload = initApp;
     </script>
 </body>
 </html>
