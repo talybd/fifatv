@@ -2,608 +2,389 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Appolo TV - Live IPTV</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MARUF IPTV</title>
     
     <!-- Clappr Player Script -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@clappr/player@latest/dist/clappr.plainhtml5.min.js"></script>
     
-    <!-- Font Awesome Icons for design -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Roboto, sans-serif;
             user-select: none;
+            -webkit-user-select: none;
         }
-
-        body {
-            background-color: #0b0f19;
-            color: #fff;
-            height: 100vh;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* --- 1. TOP HEADER NAVIGATION --- */
-        header {
-            background-color: #060913;
-            padding: 10px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #1e293b;
-        }
-
-        .logo-area {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .logo-box {
-            background: #fff;
-            color: #0052cc;
-            padding: 4px 12px;
-            border-radius: 6px;
-            font-weight: bold;
-            font-size: 20px;
-        }
-
-        .brand-name {
-            font-size: 18px;
-            font-weight: bold;
-            letter-spacing: 0.5px;
-        }
-        .brand-name span {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-left: 5px;
-        }
-
-        .category-tabs {
-            display: flex;
-            gap: 8px;
-        }
-
-        .tab {
-            background: #1e293b;
-            color: #cbd5e1;
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .tab.active, .tab:hover {
-            background: #ff2a4b;
-            color: #fff;
-        }
-
-        /* --- 2. MARQUEE & NOTIFICATION BAR --- */
-        .notice-bar {
-            background: #090d16;
-            padding: 8px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            font-size: 13px;
-            border-bottom: 1px solid #151f32;
-        }
-
-        .social-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-telegram {
-            background: #0088cc;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-        }
-
-        .btn-download-top {
-            background: #0284c7;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 12px;
-        }
-
-        .ticker-text {
-            color: #94a3b8;
-            flex: 1;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-
-        /* --- 3. MAIN CONTENT LAYOUT --- */
-        .main-container {
-            display: flex;
-            flex: 1;
-            padding: 15px;
-            gap: 15px;
-            height: calc(100vh - 110px);
-        }
-
-        /* Left Side: Player Container */
-        .player-section {
-            flex: 2.5;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .video-box {
+        body, html {
             width: 100%;
-            height: 82%;
-            background: #000;
-            border-radius: 8px;
+            height: 100%;
+            background-color: #0c0f17;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            color: #fff;
             overflow: hidden;
-            position: relative;
-            border: 1px solid #1e293b;
         }
 
+        /* মেইন কন্টেইনার লেআউট */
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        /* 📺 লাইভ ভিডিও প্লেয়ার স্টাইল */
         #player-wrapper {
+            width: 100%;
+            background-color: #000;
+            position: relative;
+            z-index: 5;
+        }
+        #player-wrapper video {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+        }
+        [data-player] {
             width: 100% !important;
             height: 100% !important;
         }
 
-        /* Current Playing Info Bar underneath player */
-        .player-footer {
-            background: #111827;
-            padding: 12px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid #1e293b;
-        }
-
-        .current-ch-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .current-ch-logo {
-            width: 45px;
-            height: 45px;
-            background: #fff;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px;
-        }
-        .current-ch-logo img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .current-ch-details .live-tag {
-            background: #ff2a4b;
-            font-size: 10px;
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
-        .current-ch-details .cat-name {
-            font-size: 11px;
-            color: #64748b;
-            margin-left: 5px;
-        }
-        .current-ch-details h3 {
-            font-size: 16px;
-            margin-top: 3px;
-            color: #fff;
-        }
-
-        .btn-stretch {
-            background: #1e293b;
-            border: 1px solid #334155;
-            color: #94a3b8;
-            padding: 6px 14px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .btn-stretch:hover {
-            color: #fff;
-            border-color: #475569;
-        }
-
-        /* Right Side: Channel List Sidebar */
-        .sidebar-section {
+        /* 📋 চ্যানেল এরিয়া কন্টেইনার */
+        .content-section {
             flex: 1;
-            background: #111622;
-            border-radius: 8px;
-            border: 1px solid #1e293b;
             display: flex;
             flex-direction: column;
-            padding: 12px;
-            gap: 10px;
+            overflow: hidden;
+            background: #0f121d;
         }
 
-        /* Download Banner in Sidebar */
-        .app-download-banner {
-            background: linear-gradient(135deg, #022c22, #064e3b);
-            border: 1px solid #059669;
-            padding: 10px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-        }
-        .download-icon {
-            background: #10b981;
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        .download-text h4 {
-            font-size: 12px;
-            color: #fff;
-        }
-        .download-text p {
-            font-size: 10px;
-            color: #a7f3d0;
-        }
-
-        /* Channel Search */
-        .search-container {
-            position: relative;
-        }
-        .search-container i {
-            position: absolute;
-            left: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #475569;
-            font-size: 14px;
-        }
-        .search-box {
+        /* 🏷️ চ্যানেল গ্রুপ ট্যাব (শুধুমাত্র ALL থাকবে) */
+        .category-bar {
             width: 100%;
-            background: #090d16;
-            border: 1px solid #1e293b;
-            padding: 8px 8px 8px 32px;
-            border-radius: 6px;
-            color: white;
-            font-size: 13px;
-            outline: none;
+            padding: 12px 20px;
+            background: #131722;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
         }
-        .search-box::placeholder {
-            color: #475569;
+        .tab-btn {
+            background: #e50914;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 12px rgba(229, 9, 20, 0.3);
         }
 
-        /* Grid Channel List Wrapper */
-        .grid-channels {
+        /* 💎 চ্যানেল গ্রিড/লিস্ট কন্টেইনার */
+        .channel-list-container {
             flex: 1;
             overflow-y: auto;
+            padding: 20px;
+        }
+
+        .channel-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            padding-right: 2px;
-        }
-
-        /* Channel Item Card */
-        .channel-card {
-            background: #1c2333;
-            border: 1px solid #2e3a54;
-            border-radius: 8px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.2s ease;
-            min-height: 95px;
-        }
-
-        .channel-card .live-badge {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: #ff2a4b;
-            color: white;
-            font-size: 8px;
-            padding: 1px 4px;
-            border-radius: 3px;
-            font-weight: bold;
-        }
-
-        .channel-thumb {
-            width: 45px;
-            height: 45px;
-            background: white;
-            border-radius: 6px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 4px;
-            margin-bottom: 6px;
-        }
-
-        .channel-thumb img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .channel-title {
-            font-size: 11px;
-            font-weight: 600;
-            color: #cbd5e1;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
             width: 100%;
         }
 
-        /* Hover & Active System */
-        .channel-card:hover {
-            border-color: #0284c7;
-            background: #242f46;
-            transform: translateY(-2px);
-        }
-
-        .channel-card.active {
-            border: 2px solid #00dc82;
-            background: #142c26;
-        }
-        .channel-card.active .channel-title {
-            color: #00dc82;
-        }
-
-        /* Custom Scrollbar for channel sidebar */
-        .grid-channels::-webkit-scrollbar {
-            width: 5px;
-        }
-        .grid-channels::-webkit-scrollbar-track {
-            background: #090d16;
-        }
-        .grid-channels::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 10px;
-        }
-
-        /* Responsive Breakpoint for Mobile Devices */
-        @media (max-width: 900px) {
-            .main-container {
-                flex-direction: column;
-                height: auto;
-                overflow-y: auto;
+        /* ==========================================================================
+           🖥️ পিসি মোড স্টাইল (ডিফল্ট লার্জ স্ক্রিন)
+           ========================================================================== */
+        @media (min-width: 769px) {
+            .app-container {
+                height: 100vh;
             }
-            body { overflow-y: auto; }
-            .player-section { flex: none; height: 350px; }
-            .sidebar-section { flex: none; height: 500px; }
-            header { flex-direction: column; gap: 10px; }
+            #player-wrapper {
+                height: 60vh; /* স্ক্রিনের ৬০% জুড়ে ভিডিও থাকবে */
+                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            }
+            .channel-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+            /* পিসির জন্য প্রিমিয়াম ডার্ক কার্ড ডিজাইন */
+            .channel-card {
+                background: rgba(255, 255, 255, 0.04);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                padding: 16px;
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                cursor: pointer;
+                transition: all 0.25s ease;
+            }
+            .channel-card:hover {
+                background: rgba(255, 255, 255, 0.12);
+                border-color: #e50914;
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(229, 9, 20, 0.15);
+            }
+            .channel-card.active {
+                background: linear-gradient(135deg, #e50914, #b20710);
+                border-color: #ff1e27;
+                box-shadow: 0 6px 25px rgba(229, 9, 20, 0.4);
+            }
+            .ch-icon {
+                width: 45px;
+                height: 45px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: bold;
+                color: #e50914;
+                font-size: 18px;
+                flex-shrink: 0;
+            }
+            .channel-card.active .ch-icon {
+                background: rgba(255, 255, 255, 0.2);
+                color: #fff;
+            }
+            .ch-info {
+                overflow: hidden;
+            }
+            .ch-title {
+                font-size: 15px;
+                font-weight: 500;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .ch-sub {
+                font-size: 12px;
+                color: #8892b0;
+                margin-top: 2px;
+            }
+            .channel-card.active .ch-sub {
+                color: rgba(255,255,255,0.7);
+            }
         }
+
+        /* ==========================================================================
+           📱 মোবাইল মোড স্টাইল (অটো মোবাইল ভিউ স্ক্রিনশট অনুযায়ী)
+           ========================================================================== */
+        @media (max-width: 768px) {
+            #player-wrapper {
+                height: 30vh; /* মোবাইলের টপে ফিক্সড ভিডিও */
+                position: sticky;
+                top: 0;
+            }
+            .category-bar {
+                padding: 10px 15px;
+            }
+            .channel-list-container {
+                padding: 15px;
+            }
+            /* মোবাইল স্ক্রিনশটের মতো ৩ কলাম গোল বৃত্তাকার গ্রিড লেআউট */
+            .channel-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 15px 10px;
+            }
+            .channel-card {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                cursor: pointer;
+                background: transparent;
+                border: none;
+            }
+            /* গোল আইকন মেকানিজম */
+            .ch-icon {
+                width: 75px;
+                height: 75px;
+                background: #ffffff;
+                border-radius: 50%; /* পারফেক্ট গোল বাটন */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 700;
+                color: #222;
+                font-size: 22px;
+                box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+                transition: all 0.2s ease;
+                border: 3px solid transparent;
+                flex-shrink: 0;
+            }
+            /* একটিভ চ্যানেলে গ্লো ইফেক্ট */
+            .channel-card.active .ch-icon {
+                border-color: #3b82f6;
+                box-shadow: 0 0 15px #3b82f6;
+                transform: scale(1.05);
+            }
+            .ch-info {
+                margin-top: 8px;
+                width: 100%;
+            }
+            .ch-title {
+                font-size: 13px;
+                font-weight: 500;
+                color: #e2e8f0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .ch-sub {
+                font-size: 11px;
+                color: #64748b;
+                margin-top: 1px;
+            }
+        }
+
+        /* ওএসডি নোটিফিকেশন */
+        #osd-alert {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 13px;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+        #osd-alert.show { opacity: 1; }
+        .channel-list-container::-webkit-scrollbar { width: 5px; }
+        .channel-list-container::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
     </style>
 </head>
 <body>
 
-    <!-- 1. TOP HEADER NAVIGATION -->
-    <header>
-        <div class="logo-area">
-            <div class="logo-box">Appolo</div>
-            <div class="brand-name">APPOLO TV <span>KSBNET</span></div>
-        </div>
-        <div class="category-tabs">
-            <div class="tab active">All</div>
-            <div class="tab">Sports</div>
-            <div class="tab">Bangla</div>
-            <div class="tab">Hindi</div>
-            <div class="tab">English</div>
-            <div class="tab">Islamic</div>
-            <div class="tab">Kids</div>
-        </div>
-    </header>
+    <div class="app-container">
+        <!-- 📺 ভিডিও প্লেয়ার সেকশন -->
+        <div id="player-wrapper"></div>
 
-    <!-- 2. MARQUEE & NOTIFICATION BAR -->
-    <div class="notice-bar">
-        <div class="social-buttons">
-            <a href="#" class="btn-telegram"><i class="fab fa-telegram-plane"></i> Join AppoloTV Telegram Channel</a>
-            <a href="#" class="btn-telegram"><i class="fab fa-telegram-plane"></i> Join AppoloTV Telegram Group</a>
-        </div>
-        <a href="#" class="btn-download-top"><i class="fas fa-download"></i> এখানে ক্লিক করে অ্যাপ ডাউনলোড করুন !!!</a>
-        <div class="ticker-text">
-            <marquee behavior="scroll" direction="left">বিজ্ঞাপন: #KSBNET কানেকশন দিচ্ছে Optical Fiber Cable এর মাধ্যমে আপনার এলাকায়...</marquee>
+        <!-- 📋 কন্টেন্ট এবং লিস্ট সেকশন -->
+        <div class="content-section">
+            <!-- গ্রুপ ট্যাব বার -->
+            <div class="category-bar">
+                <button class="tab-btn">ALL</button>
+            </div>
+
+            <!-- চ্যানেল তালিকা -->
+            <div class="channel-list-container">
+                <div class="channel-grid" id="channelGrid"></div>
+            </div>
         </div>
     </div>
 
-    <!-- 3. MAIN CONTENT LAYER -->
-    <div class="main-container">
-        
-        <!-- Left Section: Video Stream -->
-        <div class="player-section">
-            <div class="video-box">
-                <!-- Clappr Video Content Mount Point -->
-                <div id="player-wrapper"></div>
-            </div>
-            
-            <!-- Lower Playing Bar Indicator -->
-            <div class="player-footer">
-                <div class="current-ch-info">
-                    <div class="current-ch-logo" id="currentLogo">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/22/Bangladesh_Television_logo.svg" alt="Ch Logo">
-                    </div>
-                    <div class="current-ch-details">
-                        <div><span class="live-tag">● LIVE</span><span class="cat-name">/ BANGLA</span></div>
-                        <h3 id="currentTitle">BTV HD</h3>
-                    </div>
-                </div>
-                <button class="btn-stretch" onclick="toggleStretch()"><i class="fas fa-expand-arrows-alt"></i> STRETCH</button>
-            </div>
-        </div>
-
-        <!-- Right Section: Interactive Sidebar -->
-        <div class="sidebar-section">
-            <!-- Sidebar Download Action Box -->
-            <div class="app-download-banner">
-                <div class="download-icon"><i class="fas fa-cloud-download-alt"></i></div>
-                <div class="download-text">
-                    <h4>এখানে ক্লিক করে অ্যাপ ডাউনলোড করুন!!!</h4>
-                    <p>v6.0.0 - একই অ্যাপ Android Mobile & Android TV এর জন্য।</p>
-                </div>
-            </div>
-
-            <!-- Search Field -->
-            <div class="search-container">
-                <i class="fas fa-search"></i>
-                <input type="text" class="search-box" id="searchChannel" placeholder="Search channel..." onkeyup="filterChannels()">
-            </div>
-
-            <!-- Channel List Grid -->
-            <div class="grid-channels" id="channelGrid">
-                <!-- JavaScript automatically populates elements here -->
-            </div>
-        </div>
-
-    </div>
+    <!-- ওএসডি অ্যালার্ট ও পপআপ -->
+    <div id="osd-alert">MARUF IPTV</div>
 
     <script>
-        // আপনার দেওয়া আসল প্লেলিস্টের ওপর ভিত্তি করে সাজানো কন্টেন্ট ডাটাবেজ
-        const liveChannels = [
-            { name: "BTV HD", logo: "https://upload.wikimedia.org/wikipedia/commons/2/22/Bangladesh_Television_logo.svg", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8", live: true },
-            { name: "BTV HD 2", logo: "https://upload.wikimedia.org/wikipedia/commons/2/22/Bangladesh_Television_logo.svg", url: "https://live.shamim-iptv.workers.dev/BTV.m3u8", live: false },
-            { name: "SOMOY TV HD 2", logo: "https://yt3.googleusercontent.com/ytc/AIdrodk_7S_5k7_w7eunZ-6w68B7Z-e5L2577H8w=s900-c-k-c0x00ffffff-no-rj", url: "https://live.shamim-iptv.workers.dev/SOMOYTVHD.m3u8", live: false },
-            { name: "T SPORTS HD", logo: "https://yt3.googleusercontent.com/ytc/AIdrodi6Z3n7w6_7L-eunZ-6w68B7Z-e5L2577H8w", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.ts.m3u8", live: false },
-            { name: "T SPORTS HD 2", logo: "https://yt3.googleusercontent.com/ytc/AIdrodi6Z3n7w6_7L-eunZ-6w68B7Z-e5L2577H8w", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.ts.m3u8", live: false },
-            { name: "UNITEB SPORTS 1 HD", logo: "https://placehold.co/100x100/1e293b/fff?text=UNITED", url: "https://bein-esp-xumo.amagi.tv/playlistR1080p.m3u8", live: false },
-            { name: "ALJAZEERA HD", logo: "https://upload.wikimedia.org/wikipedia/en/f/f2/Al_Jazeera_English_logo.svg", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8", live: false },
-            { name: "AND FLIX HD", logo: "https://placehold.co/100x100/1e293b/fff?text=&Flix", url: "https://live.shamim-iptv.workers.dev/scifi.m3u8", live: false },
-            { name: "AND PICTURES HD", logo: "https://placehold.co/100x100/1e293b/fff?text=&Pictures", url: "https://live.shamim-iptv.workers.dev/mnxhd.m3u8", live: false },
-            { name: "AND PRIVE HD", logo: "https://placehold.co/100x100/1e293b/fff?text=&Prive", url: "https://live.shamim-iptv.workers.dev/scifi.m3u8", live: false },
-            { name: "AND XPLOR HD", logo: "https://placehold.co/100x100/1e293b/fff?text=&Xplor", url: "https://live.shamim-iptv.workers.dev/mnxhd.m3u8", live: false },
-            { name: "ANIMAL PLANET HD", logo: "https://upload.wikimedia.org/wikipedia/commons/b/bc/Animal_Planet_logo_2018.svg", url: "https://tiger-hub.vercel.app@vodzong.mjunoon.tv:8087/streamtest/Animal-Planet-158-3/playlist.m3u8", live: false }
+        // চ্যানেল প্লেলিস্ট ডেটাবেস
+        const allChannels = [
+            { name: "Drama 24", url: "https://vods2.aynaott.com/gseriesDrama/tracks-v1a1/mono.ts.m3u8" },
+            { name: "BTV National", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1709/output/index.m3u8" },
+            { name: "Channel 1", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1702/output/index.m3u8" },
+            { name: "Jamuna TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1701/output/index.m3u8" },
+            { name: "DBC News HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1728/output/index.m3u8" },
+            { name: "Maasranga TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1722/output/index.m3u8" },
+            { name: "Ekattor HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1705/output/index.m3u8" },
+            { name: "Channel 24 HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1703/output/index.m3u8" },
+            { name: "ATN News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1706/output/index.m3u8" },
+            { name: "News 24 HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1708/output/index.m3u8" },
+            { name: "Star News", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1710/output/index.m3u8" },
+            { name: "Islamic TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1724/output/index.m3u8" },
+            { name: "Deepto TV HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1711/output/index.m3u8" },
+            { name: "Channel 9 HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1729/output/index.m3u8" },
+            { name: "Channel I HD", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1723/output/index.m3u8" },
+            { name: "Bangla Vision", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1715/output/index.m3u8" },
+            { name: "NTV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1716/output/index.m3u8" },
+            { name: "Al Jazeera", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1721/output/index.m3u8" },
+            { name: "Al Quran", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1713/output/index.m3u8" },
+            { name: "Independent TV", url: "https://owrcovcrpy.gpcdn.net/bpk-tv/1704/output/index.m3u8" },
+            { name: "Willow Sports", url: "https://d36r8jifhgsk5j.cloudfront.net/Willow_TV.m3u8" },
+            { name: "T Sports", url: "https://flussonic.deltainfonet.com/01_Tsports_HD/tracks-v1a1/mono.m3u8" }
         ];
 
         let player;
-        let isStretched = false;
+        const gridContainer = document.getElementById('channelGrid');
 
-        // লোড হওয়ার সাথে সাথে গ্রিড চ্যানেল তৈরি করবে
+        // লোড হওয়ার সাথে সাথে চ্যানেল ইন্টারফেস বিল্ড করা
         function initApp() {
-            const grid = document.getElementById('channelGrid');
-            grid.innerHTML = '';
-
-            liveChannels.forEach((channel, idx) => {
+            gridContainer.innerHTML = "";
+            allChannels.forEach((channel, index) => {
+                // নামের প্রথম অক্ষর আইকনে দেখানোর জন্য ফিল্টার করা
+                const firstChar = channel.name.charAt(0).toUpperCase();
+                
                 const card = document.createElement('div');
-                card.className = `channel-card ${idx === 0 ? 'active' : ''}`;
-                card.setAttribute('onclick', `switchChannel(${idx})`);
-                
-                let liveBadge = channel.live ? `<span class="live-badge">LIVE</span>` : '';
-                
+                card.className = `channel-card ${index === 0 ? 'active' : ''}`;
+                card.id = `channel-${index}`;
+                card.onclick = () => playChannel(index);
+
                 card.innerHTML = `
-                    ${liveBadge}
-                    <div class="channel-thumb">
-                        <img src="${channel.logo}" alt="${channel.name}">
+                    <div class="ch-icon">${firstChar}</div>
+                    <div class="ch-info">
+                        <div class="ch-title">${channel.name}</div>
+                        <div class="ch-sub">MARUF IPTV</div>
                     </div>
-                    <div class="channel-title">${channel.name}</div>
                 `;
-                grid.appendChild(card);
+                gridContainer.appendChild(card);
             });
 
-            // প্রথম চ্যানেল দিয়ে প্লেয়ার চালু
-            setupPlayer(liveChannels[0].url);
+            // ১ম চ্যানেলটি দিয়ে প্লেয়ার রান করা
+            if(allChannels.length > 0) {
+                initPlayer(allChannels[0].url);
+            }
         }
 
-        // Clappr প্লেয়ার সেটআপ 
-        function setupPlayer(streamUrl) {
-            if (player) {
-                player.destroy();
-            }
+        // প্লেয়ার কাস্টমাইজেশন ট্রিগার
+        function initPlayer(url) {
             player = new Clappr.Player({
-                source: streamUrl,
+                source: url,
                 parentId: "#player-wrapper",
                 width: "100%",
                 height: "100%",
                 autoPlay: true,
-                playback: {
-                    playInline: true,
-                    recycleVideo: true
-                }
+                playback: { playInline: true, recycleVideo: true }
             });
         }
 
-        // ক্লিক করলে নতুন চ্যানেল প্লে হবে এবং ডিটেইলস আপডেট হবে
-        function switchChannel(index) {
-            const targetChannel = liveChannels[index];
+        // চ্যানেল পরিবর্তনের ফাঙ্গশন
+        function playChannel(index) {
+            if (index < 0 || index >= allChannels.length) return;
             
-            // প্লেয়ার সোর্স পরিবর্তন
-            setupPlayer(targetChannel.url);
+            player.configure({ source: allChannels[index].url });
+            player.play();
 
-            // UI ইনফো আপডেট
-            document.getElementById('currentTitle').innerText = targetChannel.name;
-            document.getElementById('currentLogo').innerHTML = `<img src="${targetChannel.logo}" alt="logo">`;
-
-            // একটিভ ক্লাস আপডেট
-            const cards = document.querySelectorAll('.channel-card');
-            cards.forEach((card, idx) => {
-                if(idx === index) card.classList.add('active');
-                else card.classList.remove('active');
-            });
-        }
-
-        // সার্চ ফাংশন
-        function filterChannels() {
-            const query = document.getElementById('searchChannel').value.toLowerCase();
-            const cards = document.querySelectorAll('.channel-card');
-            
-            cards.forEach((card, index) => {
-                const channelName = liveChannels[index].name.toLowerCase();
-                if(channelName.includes(query)) {
-                    card.style.display = 'flex';
+            // একটিভ ক্লাসের ইন্টারফেস পরিবর্তন
+            document.querySelectorAll('.channel-card').forEach((card, i) => {
+                if(i === index) {
+                    card.classList.add('active');
+                    card.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
                 } else {
-                    card.style.display = 'none';
+                    card.classList.remove('active');
                 }
             });
+
+            showOSD("📺 Now Playing: " + allChannels[index].name);
         }
 
-        // স্ট্রেচ বাটন ফিট টগল লজিক
-        function toggleStretch() {
-            const videoElement = document.querySelector('#player-wrapper video');
-            if (videoElement) {
-                if (!isStretched) {
-                    videoElement.style.objectFit = 'fill';
-                    isStretched = true;
-                } else {
-                    videoElement.style.objectFit = 'contain';
-                    isStretched = false;
-                }
-            }
+        // ওএসডি পপআপ টেক্সট রানার
+        function showOSD(text) {
+            const osd = document.getElementById('osd-alert');
+            osd.innerText = text;
+            osd.classList.add('show');
+            setTimeout(() => osd.classList.remove('show'), 2500);
         }
 
-        // উইন্ডো লোড হলে রান হবে
+        // রানিং অ্যাপ স্টার্টার
         window.onload = initApp;
     </script>
 </body>
